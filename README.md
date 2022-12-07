@@ -35,6 +35,7 @@
 * train a simple NN
 * test on that NN
 * show basic info, accuracy during training/testing (tensorflow "standard" output values)
+* KNeighbours classifier for now
 
 #### Prototype 2
 
