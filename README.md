@@ -62,9 +62,7 @@ Ex.: to import divorce.csv create folder Data in root dir of repository and put 
 * Lecture on Neural Networks: https://cs50.harvard.edu/ai/2020/notes/5/
 
 #### Other
-
-* github names to create repository
-  * ...
+* ?
 
 #### Questions
 
