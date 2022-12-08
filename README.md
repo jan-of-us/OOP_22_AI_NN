@@ -34,7 +34,7 @@
 * load data into list/array
 * train a simple NN
 * test on that NN
-* show basic info, accuracy during training/testing (tensorflow "standard" output values)
+* show basic info, accuracy
 * KNeighbours classifier for now
 
 #### Prototype 2
