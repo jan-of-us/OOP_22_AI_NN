@@ -74,7 +74,7 @@ class KN_Classification:
         return sensitivity, specificity
 
     def plot(self):
-        ...
+        raise NotImplementedError
         # TODO
 
 
