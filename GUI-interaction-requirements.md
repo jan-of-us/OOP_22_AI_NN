@@ -20,3 +20,4 @@
 * create class ex. KNeighbours(Data=x, K=1, split=0.8)
 * Class has a method called run or similar for processing
 * plot or print to output the results, various parameters to decide format / type etc
+* Possible wrapper class that calls all the other classes, not sure yet if possible
