@@ -8,7 +8,7 @@
     * specifying various parameters:
         * train / test splits
         * for KNeighbours: K
-        * for NN: training time, hidden layer count and type (?)
+        * for NN: training time, activation functions, hidden layer count and type (?)
     * tbd: specify input data format, split into evidence & labels?, numeric values, easy example: evidence: list of lists, labels: list
 
 ### Outputs
