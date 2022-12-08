@@ -2,6 +2,16 @@
 
 ## AI and Neural Networks
 
+### Usage Prototype 1 KNeighbours
+#### data_import.py
+used to import .csv data (only numeric values) into a combination of list of lists for evidence and a list for the labels
+input: filepath
+returns: evidence, labels
+
+Ex.: to import divorce.csv create folder Data in root dir of repository and put divorce.csv inside. Call import_csv('Filepath')
+
+
+
 ### Kickoff meeting
 
 #### Prerequisites
