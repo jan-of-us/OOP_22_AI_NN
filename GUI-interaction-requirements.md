@@ -21,3 +21,4 @@
 * Class has a method called run or similar for processing
 * plot or print to output the results, various parameters to decide format / type etc
 * Possible wrapper class that calls all the other classes, not sure yet if possible
+* show dataframe method to show manipulated data
