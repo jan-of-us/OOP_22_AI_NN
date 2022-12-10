@@ -18,7 +18,7 @@ class Class_Name_Here:
     def return_data(self) -> InputDataFormat:
         returns the manipulated data
 
-    def print_results(self) -> str:
+    def __str__(self) -> str:
         returns a string with whatever info you want to display to the user
 
     def plot(self, parameter_for_plot_selection) -> PlotFormat:
