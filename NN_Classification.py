@@ -5,18 +5,18 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 
 class NN_Classification(Classification):
-    def __init__(self, evidence, labels, test_size=0.2, epochs=10):
-        #super().__init__(data=None, test_size=0.2)
+    def __init__(self, data, test_size=0.2, epochs=10):
+        super().__init__(data, test_size=0.2)
         self.epochs = epochs
 
         # TEMPORARY TODO Implement super methods based on GUI Dataformat
-        self.evidence = evidence
-        self.labels = labels
-        self.labels = tf.keras.utils.to_categorical(self.labels)
-        self.test_size = test_size
-        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(
-            np.array(self.evidence), np.array(self.labels), test_size=self.test_size
-        )
+        #self.evidence = evidence
+        #self.labels = labels
+        #self.labels = tf.keras.utils.to_categorical(self.labels)
+        #self.test_size = test_size
+        #self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(
+        #    np.array(self.evidence), np.array(self.labels), test_size=self.test_size
+        #)
 
 
         self.get_model()
@@ -36,8 +36,8 @@ class NN_Classification(Classification):
 
 
 def main(file):
-    evidence, labels = import_csv(file)
-    classifier = NN_Classification(evidence, labels)
+    data = import_csv(file)
+    classifier = NN_Classification(data)
 
 
 if __name__ == "__main__":

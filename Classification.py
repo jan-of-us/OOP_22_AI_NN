@@ -1,4 +1,5 @@
 from sklearn.model_selection import train_test_split
+import pandas as pd
 
 
 class Classification:
@@ -10,7 +11,7 @@ class Classification:
         :param data: dataframe containing the dataset
         :param test_size: share of data that is used for testing. Default: 0.2
         """
-        self.evidence, self.labels, self.model = [], [], None
+        self.evidence, self.labels, self.model = pd.DataFrame, pd.DataFrame, None
         self.data = data
         self.test_size = test_size
 
@@ -21,12 +22,12 @@ class Classification:
             self.evidence, self.labels, test_size=self.test_size
         )
 
-
     def split_evidence_labels(self):
         """
         Splits given dataset into evidence and labels
         """
-        pass
+        self.labels = self.data["Class"]
+        self.evidence = self.data.iloc[:, :-1]
 
     def return_data(self):
         """
