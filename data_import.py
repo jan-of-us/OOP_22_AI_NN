@@ -1,4 +1,5 @@
 import csv
+import pandas
 
 
 def import_csv(filename) -> tuple:

@@ -16,11 +16,11 @@ def main():
 class KN_Classification:
     """
     K-Neighbours-classification.
-    :param evidence array of evidence, int or float,
-    :param labels list of labels int
-    :param test_size Size of testing data 0-1, default: 0.2 float,
-    :param k neighbours to be considered for classification int Default k=1
-    :return: tbd, prints evaluation to terminal
+    :param evidence: array of evidence, int or float,
+    :param labels: list of labels int
+    :param test_size: Size of testing data 0-1, default: 0.2 float,
+    :param k: neighbours to be considered for classification int Default k=1
+    :return: prints evaluation to terminal
     """
     def __init__(self, evidence, labels, test_size=0.2, k=1):
         self.evidence = evidence
