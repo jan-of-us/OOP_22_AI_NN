@@ -4,7 +4,7 @@
 * Plots: matplotlib.pyplot or plotly -> final format TBD
 * If you use any special modules that require specific python versions, please specify, ex. Tensorflow only works with Python 3.9 atm
 * All groups should have a requirements.txt document that lists needed packages for their program, it can be installed with pip install -r requirements.txt
-* All groups need to have a file (md?) describing how the module gets called in the gui, which input values you need, which types of graphs can be displayed etc
+* All groups need to have a readme.md describing how the module gets called in the gui, which input values you need, which types of graphs can be displayed etc
 * 
 
 ## Class structure

@@ -1,6 +1,26 @@
-# Project 2022
+# Project 2022 - AI and Neural Networks
 
-## AI and Neural Networks
+## Implementation into the GUI
+### User Inputs:
+#### General: 
+  * data -> dataframe/nparray tbd
+  * test_size -> share of data that is used for testing
+##### KN_Classification
+* k -> specifies how many neighbouring nodes are used for classification
+
+#### Random Forest
+* tbd
+#### Neural Network classifier
+* training epochs
+
+### Outputs:
+#### General:
+  * 
+#### Plots
+* confusion matrix
+* 
+
+
 
 ### Usage Prototype 1 KNeighbours
 #### data_import.py
@@ -38,6 +58,8 @@ Ex.: to import divorce.csv create folder Data in root dir of repository and put 
   * data info: class distributions, ...
   * influence of each input variable and the result?
 
+### Roadmap
+
 #### Prototype 1 - classification only
 
 * read data
@@ -49,9 +71,12 @@ Ex.: to import divorce.csv create folder Data in root dir of repository and put 
 
 #### Prototype 2
 
-* ...
+* Neural Network classifier
 
-#### Preparation
+#### Next steps
+* super class Classification for previous prototypes
+
+### Links
 
 * Tensorflow documentation: https://www.tensorflow.org/
 * TF RandomForest: https://www.tensorflow.org/decision_forests/api_docs/python/tfdf/keras/RandomForestModel
