@@ -1,6 +1,6 @@
 ## General requirements
-* Input Data Format: np.ndarray, pd.DataFrame, something else ? TDB!
-* return Data must have same format
+* Input Data Format: pandas.dataframe
+* return Data Format: pandas.dataframe
 * Plots: matplotlib.pyplot or plotly -> final format TBD
 * If you use any special modules that require specific python versions, please specify, ex. Tensorflow only works with Python 3.9 atm
 * All groups should have a requirements.txt document that lists needed packages for their program, it can be installed with pip install -r requirements.txt

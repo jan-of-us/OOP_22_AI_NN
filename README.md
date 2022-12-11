@@ -3,7 +3,7 @@
 ## Implementation into the GUI
 ### User Inputs:
 #### General: 
-  * data -> dataframe/nparray tbd
+  * data -> pandas.dataframe
   * test_size -> share of data that is used for testing
 ##### KN_Classification
 * k -> specifies how many neighbouring nodes are used for classification
