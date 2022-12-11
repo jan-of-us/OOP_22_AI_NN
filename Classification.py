@@ -1,5 +1,7 @@
 from sklearn.model_selection import train_test_split
 import pandas as pd
+import numpy as np
+import tensorflow as tf
 
 
 class Classification:
@@ -26,7 +28,7 @@ class Classification:
         """
         Splits given dataset into evidence and labels
         """
-        self.labels = self.data["Class"]
+        self.labels = self.data[self.data.columns[-1]]
         self.evidence = self.data.iloc[:, :-1]
 
     def return_data(self):
