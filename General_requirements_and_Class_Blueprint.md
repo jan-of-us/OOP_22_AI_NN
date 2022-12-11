@@ -19,7 +19,10 @@ class Class_Name_Here:
         returns the manipulated data
 
     def __str__(self) -> str:
-        returns a string with whatever info you want to display to the user
+        returns a string with information about the used methods, to display to the user what is done if the data is processed in this way
+        
+    def print_results(self) -> str:
+        returns a string with the results of the data processing
 
     def plot(self, parameter_for_plot_selection) -> PlotFormat:
         with the parameter output different type of plots, if you only need one it's not needed
