@@ -1,7 +1,5 @@
 from sklearn.model_selection import train_test_split
 import pandas as pd
-import numpy as np
-import tensorflow as tf
 
 
 class Classification:
@@ -13,10 +11,12 @@ class Classification:
         :param data: dataframe containing the dataset
         :param test_size: share of data that is used for testing. Default: 0.2
         """
+        # initialize necessary variables
         self.evidence, self.labels, self.model = pd.DataFrame, pd.DataFrame, None
         self.data = data
         self.test_size = test_size
 
+        # split the dataset into evidence and labels
         self.split_evidence_labels()
 
         # split into training and testing data
@@ -26,7 +26,7 @@ class Classification:
 
     def split_evidence_labels(self):
         """
-        Splits given dataset into evidence and labels
+        Splits given dataset into evidence and labels, requires labels to be last column of dataframe
         """
         self.labels = self.data[self.data.columns[-1]]
         self.evidence = self.data.iloc[:, :-1]
@@ -43,7 +43,7 @@ class Classification:
         Returns a string with infos about the used methods and the achieved results
         :return:
         """
-        raise NotImplementedError
+        return f"This is a Classification Superclass"
 
     def plot(self):
         """
