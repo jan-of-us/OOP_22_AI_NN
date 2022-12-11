@@ -9,6 +9,8 @@ def main():
     data = import_csv("Data/divorce.csv")
     # Create classifier class
     classifier = KN_Classification(data)
+    print(classifier)
+    print(classifier.print_results())
 
 
 
@@ -68,6 +70,17 @@ class KN_Classification(Classification):
                     corr_pos_pred += 1
         self.sensitivity = corr_pos_pred / float(pos_label)
         self.specificity = corr_neg_pred / float(neg_label)
+
+    def __str__(self):
+        return "This method implements the k-nearest neighbour algorithm. The data is classified based on the label " \
+               "of the closest neighbour(s) "
+
+    def print_results(self):
+        results = f"Correct: {(self.y_test == self.predictions).sum()}\n"\
+                    f"Incorrect: {(self.y_test != self.predictions).sum()}\n"\
+                    f"True Positive Rate: {100 * self.sensitivity:.2f}%\n"\
+                    f"True Negative Rate: {100 * self.specificity:.2f}%"
+        return results
 
     def plot(self):
         raise NotImplementedError
