@@ -109,6 +109,7 @@ Ex.: to import divorce.csv create folder Data in root dir of repository and put 
 
 ### Links
 <details>
+
 * Git Crash Course: https://www.youtube.com/watch?v=SWYqp7iY_Tc
 * Tensorflow documentation: https://www.tensorflow.org/
 * TF RandomForest: https://www.tensorflow.org/decision_forests/api_docs/python/tfdf/keras/RandomForestModel
