@@ -62,7 +62,9 @@ class NN_Classification(Classification):
         self.predictions = tf.argmax(self.predictions, 1)
         self.conf_matrix = tf.math.confusion_matrix(self.y_test, self.predictions, num_classes=2)
         self.conf_matrix = pd.DataFrame(self.conf_matrix)
-        fig = sn.heatmap(self.conf_matrix, annot=True)
+        fig, ax = plt.subplots()
+        plt.figure(figsize=(4, 4))
+        ax = sn.heatmap(self.conf_matrix, annot=True)
         return fig
 
 
