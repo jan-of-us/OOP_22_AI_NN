@@ -32,7 +32,7 @@ class NN_Classification(Classification):
             tf.keras.Input(shape=(self.evidence.shape[1])),
             tf.keras.layers.Dense(64, activation='relu'),
             tf.keras.layers.Dropout(0.2),
-            tf.keras.layers.Dense(2, activation='softmax')
+            tf.keras.layers.Dense(self.output_categories, activation='softmax')
         ])
         self.model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 

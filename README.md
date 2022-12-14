@@ -94,16 +94,17 @@ Ex.: to import divorce.csv create folder Data in root dir of repository and put 
 
 * Neural Network classifier
 
-#### Next steps
+#### Next steps current Prototype
 * further implementation of super class Classification for previous prototypes
 * implementing all needed methods
 * adding more plotting and display options
 * implementing more user influences ex. neural network layers, activation functions etc.
  
-#### To-Do Long Term
+#### To-Do Afterwards
 * revising the KNeighbours Classification
 * Implementing the random forest classifier
 * Adding a method for the timeseries dataset
+* Testing on different datasets
 
 </details>
 
