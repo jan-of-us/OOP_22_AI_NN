@@ -5,7 +5,7 @@ from Classification import Classification
 
 
 def main():
-    # import test data TODO get rid of hard coding (?)
+    # import test data
     data = import_csv("Data/divorce.csv")
     # Create classifier class
     classifier = RF_Classification(data)
@@ -13,17 +13,16 @@ def main():
     print(classifier.print_results())
 
 
-
 class RF_Classification(Classification):
     """
-    K-Neighbours-classification.
+    RandomForest-classification.
     :param evidence: array of evidence, int or float,
     :param labels: list of labels int
     :param test_size: Size of testing data 0-1, default: 0.2 float,
-    :param k: neighbours to be considered for classification int Default k=1
+    :param k: trees k=100
     :return: prints evaluation to terminal
     """
-    def __init__(self, data, test_size=0.2, k=1):
+    def __init__(self, data, test_size=0.2, k=100):
         super().__init__(data, test_size)
 
         self.k = k
