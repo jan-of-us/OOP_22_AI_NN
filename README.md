@@ -13,11 +13,26 @@
 #### Neural Network classifier
 * training epochs
 
+| Input Name       | Type             | Range / Values | Default Value | Used for      | Description                                                                                                                                 |
+|------------------|------------------|----------------|---------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| Data             | Pandas Dataframe | -              | -             | General       | Contains the dataset, only numeric values                                                                                                   |
+| test_size        | float            | 0.2-0.8        | 0.2           | General       | Share/Percentage of Data used for testing                                                                                                   |
+| hidden_layers    | array of ints    |                | [64]          | Neural Net    | Nodes for each hidden layer, every entry in the array creates a hidden layer with as many nodes as the entry's value                        |
+| training_epochs  | int              |                | 10            | Neural Net    |                                                                                                                                             |
+| activation_func  | string           |                | "relu"        | Neural Net    | https://www.tensorflow.org/api_docs/python/tf/keras/activations                                                                             |
+| validation_split | Bool             |                | True          | Neural Net    | Whether during the training a part of the data will already be used for testing after each epoch, needed for accuracy/loss per epoch graphs |
+| trees            | int              |                | 100           | Random Forest | Number of trees in the forest                                                                                                               |
+|                  |                  |                |               |               |                                                                                                                                             |
+|                  |                  |                |               |               |                                                                                                                                             |
+
+
+
 ### Outputs:
 #### General:
   * __str__ method returns a description of the methods used
   * print_results method returns the results in text form
   * plot(param) method returns different plots
+  * feature importance 
 #### Plots
 * confusion matrix
 * for NN: accuracy for each epoch training + testing, losses

@@ -22,10 +22,10 @@ class RF_Classification(Classification):
     :param k: trees k=100
     :return: prints evaluation to terminal
     """
-    def __init__(self, data, test_size=0.2, k=100):
+    def __init__(self, data, test_size=0.2, n=100):
         super().__init__(data, test_size)
 
-        self.k = k
+        self.n = n
         self.sensitivity, self.specificity, self.predictions = int(), int(), None
 
         self.run_classifier()
@@ -44,9 +44,10 @@ class RF_Classification(Classification):
         print(f"Incorrect: {(self.y_test != self.predictions).sum()}")
         print(f"True Positive Rate: {100 * self.sensitivity:.2f}%")
         print(f"True Negative Rate: {100 * self.specificity:.2f}%")
+        print(dict(zip(self.x_test.columns, self.model.feature_importances_)))
 
     def train_model(self):
-        neigh = RandomForestClassifier(n_estimators=self.k)
+        neigh = RandomForestClassifier(n_estimators=self.n)
         neigh.fit(self.evidence, self.labels)
         return neigh
 
