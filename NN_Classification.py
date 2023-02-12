@@ -59,8 +59,8 @@ class NN_Classification(Classification):
             return fig
 
         # convert predictions from percentages to labels
-        self.predictions = tf.argmax(self.predictions, 1)
-        self.conf_matrix = tf.math.confusion_matrix(self.y_test, self.predictions, num_classes=2)
+        conf_predictions = tf.argmax(self.predictions, 1)
+        self.conf_matrix = tf.math.confusion_matrix(self.y_test, conf_predictions, num_classes=2)
         self.conf_matrix = pd.DataFrame(self.conf_matrix)
         fig, ax = plt.subplots()
         plt.figure(figsize=(4, 4))
