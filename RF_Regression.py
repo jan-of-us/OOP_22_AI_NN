@@ -75,10 +75,10 @@ class RF_Regression(Regression):
 
     def plot(self):
         fig, ax = plt.subplots()
-        fig.plot(self.y_test["lights"].to_numpy()[:50], color='red', label='Real data')
-        fig.plot(self.predictions[:, 1][:50], color='blue', label='Predicted data')
-        fig.title('Prediction')
-        fig.legend()
+        plt.plot(self.y_test["lights"].to_numpy()[:50], color='red', label='Real data')
+        plt.plot(self.predictions[:, 1][:50], color='blue', label='Predicted data')
+        plt.title('Prediction')
+        plt.legend()
         return fig
 
         # feature importance pie chart
