@@ -1,5 +1,4 @@
-from data_import import import_csv
-from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score
 from Regression import Regression
@@ -22,6 +21,8 @@ def main():
 
     # Create classifier class
     regressor = RF_Regression(data)
+    regressor.plot()
+    plt.show()
 
 
 class RF_Regression(Regression):
@@ -50,9 +51,12 @@ class RF_Regression(Regression):
         # get evaluation
         # self.evaluate()
 
+        self.r2 = r2_score(self.y_test, self.predictions)
+        self.feature_importance = dict(zip(self.x_test.columns, self.model.feature_importances_))
+
         # Print results
-        print(r2_score(self.y_test, self.predictions))
-        print(dict(zip(self.x_test.columns, self.model.feature_importances_)))
+        #print(self.r2)
+        #print(self.feature_importance)
 
     def train_model(self):
         neigh = RandomForestRegressor(n_estimators=self.k)
@@ -66,11 +70,16 @@ class RF_Regression(Regression):
         return "This method implements the random forest classification."
 
     def print_results(self):
-        raise NotImplementedError
+        print(self.r2)
+        print(self.feature_importance)
 
     def plot(self):
-        raise NotImplementedError
-        # TODO
+        # feature importance pie chart
+        fig, ax = plt.subplots()
+        ax.pie(self.feature_importance.values(), labels=self.feature_importance.keys())
+        ax.axis('equal')
+
+
 
 
 if __name__ == "__main__":
