@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 from data_import import import_csv
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
@@ -9,6 +11,8 @@ def main():
     data = import_csv("Data/divorce.csv")
     # Create classifier class
     classifier = RF_Classification(data)
+    classifier.plot()
+    plt.show()
     print(classifier)
     print(classifier.print_results())
 
@@ -82,8 +86,7 @@ class RF_Classification(Classification):
         return results
 
     def plot(self):
-        raise NotImplementedError
-        # TODO
+        super().plot_confusion_matrix(y_test=self.y_test, predictions=self.predictions)
 
 
 if __name__ == "__main__":
