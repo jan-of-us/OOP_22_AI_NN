@@ -51,8 +51,10 @@ class Classification:
     @staticmethod
     def plot_confusion_matrix(y_test, predictions):
         """
-
-        :return:
+        Generates a confusion matrix with given labels and predictions
+        :param y_test: real labels
+        :param predictions: predicted labels
+        :return: matplotlib subplot
         """
         conf_matrix = confusion_matrix(y_test, predictions)
         conf_matrix = pd.DataFrame(conf_matrix)
