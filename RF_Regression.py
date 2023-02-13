@@ -74,10 +74,17 @@ class RF_Regression(Regression):
         print(self.feature_importance)
 
     def plot(self):
-        # feature importance pie chart
         fig, ax = plt.subplots()
-        ax.pie(self.feature_importance.values(), labels=self.feature_importance.keys())
-        ax.axis('equal')
+        fig.plot(self.y_test["lights"].to_numpy()[:50], color='red', label='Real data')
+        fig.plot(self.predictions[:, 1][:50], color='blue', label='Predicted data')
+        fig.title('Prediction')
+        fig.legend()
+        return fig
+
+        # feature importance pie chart
+        #fig, ax = plt.subplots()
+        #ax.pie(self.feature_importance.values(), labels=self.feature_importance.keys())
+        #ax.axis('equal')
 
 
 
