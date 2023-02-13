@@ -1,5 +1,8 @@
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sn
 
 
 class Classification:
@@ -36,7 +39,7 @@ class Classification:
         Returns the data in it's original format but manipulated state
         :return: dataframe
         """
-        raise NotImplementedError
+        return self.data
 
     def __str__(self):
         """
@@ -45,9 +48,14 @@ class Classification:
         """
         return f"This is a Classification Superclass"
 
-    def plot(self):
+    @staticmethod
+    def plot_confusion_matrix(y_test, predictions):
         """
 
         :return:
         """
-        raise NotImplementedError
+        conf_matrix = confusion_matrix(y_test, predictions)
+        conf_matrix = pd.DataFrame(conf_matrix)
+        fig, ax = plt.subplots()
+        ax = sn.heatmap(conf_matrix, annot=True)
+        return fig

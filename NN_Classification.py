@@ -42,8 +42,10 @@ class NN_Classification(Classification):
         :param param: Which plots to display: 0=all, 1=accuracy, 2=loss, 3=confusion-matrix
         :return:
         """
+
+
         if param != 3:
-            fig = plt.figure
+            fig = plt.figure()
             if param in [0, 1]:
                 plt.plot(self.history.history["accuracy"])
                 plt.plot(self.history.history["val_accuracy"])
@@ -60,18 +62,14 @@ class NN_Classification(Classification):
 
         # convert predictions from percentages to labels
         conf_predictions = tf.argmax(self.predictions, 1)
-        self.conf_matrix = tf.math.confusion_matrix(self.y_test, conf_predictions, num_classes=2)
-        self.conf_matrix = pd.DataFrame(self.conf_matrix)
-        fig, ax = plt.subplots()
-        plt.figure(figsize=(4, 4))
-        ax = sn.heatmap(self.conf_matrix, annot=True)
-        return fig
+        return Classification.plot_confusion_matrix(self.y_test, conf_predictions)
+
 
 
 def main(file):
     data = import_csv(file)
     classifier = NN_Classification(data)
-    fig = classifier.plot(3)
+    fig = classifier.plot()
     plt.show()
 
 
