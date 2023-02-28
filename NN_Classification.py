@@ -2,24 +2,24 @@ import tensorflow as tf
 from data_import import import_csv
 from Classification import Classification
 import matplotlib.pyplot as plt
+from Classification_Data import Classification_Data
 import plotly.figure_factory as ff
 import pandas as pd
 import seaborn as sn
 
 
 class NN_Classification(Classification):
-    def __init__(self, data, test_size=0.2, epochs=10):
-        super().__init__(data, test_size=0.2)
-        self.epochs = epochs
+    def __init__(self, data_obj: Classification_Data):
+        super().__init__(data_obj.data, data_obj.test_size)
 
         # get the number of output categories from the dataset
         self.output_categories = self.y_test.nunique()
 
         # create the neural network
-        self.get_model()
+        self.get_model(data_obj)
 
         # train the neural network
-        self.history = self.model.fit(self.x_train, self.y_train, validation_split=0.2, epochs=self.epochs)
+        self.history = self.model.fit(self.x_train, self.y_train, validation_split=0.2, epochs=data_obj.training_epochs)
 
         # predictions for confusion matrix
         self.predictions = self.model.predict(self.x_test)
@@ -27,7 +27,9 @@ class NN_Classification(Classification):
         # testing the network on the testing data
         self.model.evaluate(self.x_test, self.y_test, verbose=2)
 
-    def get_model(self):
+        self.plot(data_obj)
+
+    def get_model(self, data_obj):
         self.model = tf.keras.models.Sequential([
             tf.keras.Input(shape=(self.evidence.shape[1])),
             tf.keras.layers.Dense(64, activation='relu'),
@@ -36,40 +38,35 @@ class NN_Classification(Classification):
         ])
         self.model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
-    def plot(self, param=0):
+    def plot(self, data_obj):
         """
         Plot the results/history from the classification
         :param param: Which plots to display: 0=all, 1=accuracy, 2=loss, 3=confusion-matrix
         :return:
         """
+        fig = plt.figure()
+        plt.plot(self.history.history["accuracy"])
+        plt.plot(self.history.history["val_accuracy"])
+        plt.plot(self.history.history["loss"])
+        plt.plot(self.history.history["val_loss"])
+        plt.legend(["training accuracy", "testing accuracy", "train-loss", "test-loss"], loc="best")
+        plt.xlabel("epoch")
+        plt.ylabel("accuracy/loss")
+        plt.title("model accuracy & loss")
+        plt.grid()
+        data_obj.accuracy_per_epoch = fig
 
-
-        if param != 3:
-            fig = plt.figure()
-            if param in [0, 1]:
-                plt.plot(self.history.history["accuracy"])
-                plt.plot(self.history.history["val_accuracy"])
-            if param in [0, 2]:
-                plt.plot(self.history.history["loss"])
-                plt.plot(self.history.history["val_loss"])
-            plt.legend(["training accuracy", "testing accuracy", "train-loss", "test-loss"], loc="best")
-            plt.xlabel("epoch")
-            plt.ylabel("accuracy/loss")
-            plt.title("model accuracy & loss")
-            plt.grid()
-
-            return fig
 
         # convert predictions from percentages to labels
         conf_predictions = tf.argmax(self.predictions, 1)
-        return Classification.plot_confusion_matrix(self.y_test, conf_predictions)
+        data_obj.confusion_matrix = Classification.plot_confusion_matrix(self.y_test, conf_predictions)
 
 
 
 def main(file):
-    data = import_csv(file)
-    classifier = NN_Classification(data)
-    fig = classifier.plot()
+    data = pd.read_csv(file, delimiter=";")
+    data_obj = Classification_Data(data=data)
+    classifier = NN_Classification(data_obj)
     plt.show()
 
 
