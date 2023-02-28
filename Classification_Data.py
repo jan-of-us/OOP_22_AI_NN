@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 class Classification_Data:
     # INPUTS
     # data
-    data: pd.dataframe
+    data: pd.DataFrame
     # Share/Percentage of Data used for testing
     test_size: float = 0.2
     # with x_labels, if None all will be used
@@ -28,11 +28,11 @@ class Classification_Data:
 
     # OUTPUTS
     # Plots
-    confusion_matrix = None
-    accuracy_per_epoch = None
-    feature_importance = None
+    confusion_matrix: plt.Figure = plt.figure(figsize=(10, 6))
+    accuracy_per_epoch: plt.Figure = plt.figure(figsize=(10, 6))
+    feature_importance: plt.Figure = plt.figure(figsize=(10, 6))
 
     # text based
-    result_string = None
+    result_string: str = ""
 
 
