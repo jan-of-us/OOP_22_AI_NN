@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import r2_score
+from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 from Regression import Regression
+from Regression_Data import Regression_Data
 import pandas as pd
 
 
@@ -18,9 +19,10 @@ def main():
     data['minute'] = data['date'].dt.minute
 
 
-
+    # Create Data Class
+    data_obj = Regression_Data(data=data)
     # Create classifier class
-    regressor = RF_Regression(data)
+    regressor = RF_Regression(data_obj)
     regressor.plot()
     plt.show()
 
@@ -34,10 +36,10 @@ class RF_Regression(Regression):
     :param k: trees k=100
     :return: prints evaluation to terminal
     """
-    def __init__(self, data, test_size=0.2, k=100):
-        super().__init__(data, test_size)
+    def __init__(self, data_obj: Regression_Data):
+        super().__init__(data_obj.data, data_obj.test_size)
 
-        self.k = k
+        self.k = data_obj.trees
         self.sensitivity, self.specificity, self.predictions = int(), int(), None
 
         self.run_classifier()
@@ -52,10 +54,12 @@ class RF_Regression(Regression):
         # self.evaluate()
 
         self.r2 = r2_score(self.y_test, self.predictions)
+        self.mas = mean_absolute_error(self.y_test, self.predictions)
+        self.mse = mean_squared_error(self.y_test, self.predictions)
         self.feature_importance = dict(zip(self.x_test.columns, self.model.feature_importances_))
 
         # Print results
-        #print(self.r2)
+        print(self.r2, self.mse, self.mas)
         #print(self.feature_importance)
 
     def train_model(self):
