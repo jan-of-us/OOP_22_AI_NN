@@ -21,9 +21,9 @@ def main():
 
     # Create Data Class
     data_obj = Regression_Data(data=data)
+    print(data_obj)
     # Create classifier class
     regressor = RF_Regression(data_obj)
-    regressor.plot()
     plt.show()
 
 
@@ -41,10 +41,11 @@ class RF_Regression(Regression):
 
         self.k = data_obj.trees
         self.sensitivity, self.specificity, self.predictions = int(), int(), None
+        self.run_classifier(data_obj)
 
-        self.run_classifier()
+        self.plot(data_obj)
 
-    def run_classifier(self):
+    def run_classifier(self, data_obj):
         # train the model
         self.model = self.train_model()
 
@@ -53,13 +54,13 @@ class RF_Regression(Regression):
         # get evaluation
         # self.evaluate()
 
-        self.r2 = r2_score(self.y_test, self.predictions)
-        self.mas = mean_absolute_error(self.y_test, self.predictions)
-        self.mse = mean_squared_error(self.y_test, self.predictions)
-        self.feature_importance = dict(zip(self.x_test.columns, self.model.feature_importances_))
+        data_obj.r2_score = r2_score(self.y_test, self.predictions)
+        data_obj.mean_abs_error = mean_absolute_error(self.y_test, self.predictions)
+        data_obj.mean_sqr_error = mean_squared_error(self.y_test, self.predictions)
+        data_obj.feature_importance_dict = dict(zip(self.x_test.columns, self.model.feature_importances_))
 
         # Print results
-        print(self.r2, self.mse, self.mas)
+
         #print(self.feature_importance)
 
     def train_model(self):
@@ -74,22 +75,22 @@ class RF_Regression(Regression):
         return "This method implements the random forest classification."
 
     def print_results(self):
-        print(self.r2)
-        print(self.feature_importance)
+        # TODO, part of data class??
+        raise NotImplementedError
 
-    def plot(self):
+    def plot(self, data_obj):
         fig, ax = plt.subplots()
         plt.plot(self.y_test["lights"].to_numpy()[:50], color='red', label='Real data')
         plt.plot(self.predictions[:, 1][:50], color='blue', label='Predicted data')
         plt.title('Prediction')
         plt.legend()
-        return fig
+        data_obj.prediction = fig
 
         # feature importance pie chart
-        #fig, ax = plt.subplots()
-        #ax.pie(self.feature_importance.values(), labels=self.feature_importance.keys())
-        #ax.axis('equal')
-
+        fig, ax = plt.subplots()
+        ax.pie(data_obj.feature_importance_dict.values(), labels=data_obj.feature_importance_dict.keys())
+        ax.axis('equal')
+        data_obj.feature_importance = fig
 
 
 

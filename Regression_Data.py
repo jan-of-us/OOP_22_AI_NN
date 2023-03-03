@@ -38,3 +38,7 @@ class Regression_Data:
     r2_score: float = None
     mean_abs_error: float = None
     mean_sqr_error: float = None
+    feature_importance_dict: dict = None
+
+    def __str__(self):
+        return "Test"
