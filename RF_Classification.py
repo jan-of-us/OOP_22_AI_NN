@@ -39,6 +39,7 @@ class RF_Classification(Classification):
         self.sensitivity, self.specificity, self.predictions = int(), int(), None
 
         self.run_classifier(data_obj)
+        data_obj.feature_importance_dict = dict(zip(self.x_test.columns, self.model.feature_importances_))
         self.plot(data_obj)
         data_obj.accuracy_score = accuracy_score(self.y_test, self.predictions)
 
@@ -101,7 +102,11 @@ class RF_Classification(Classification):
 
     def plot(self, data_obj):
         data_obj.confusion_matrix = super().plot_confusion_matrix(y_test=self.y_test, predictions=self.predictions)
-
+        # feature importance pie chart
+        fig, ax = plt.subplots()
+        ax.pie(data_obj.feature_importance_dict.values(), labels=data_obj.feature_importance_dict.keys())
+        ax.axis('equal')
+        data_obj.feature_importance = fig
 
 if __name__ == "__main__":
     main()
