@@ -7,6 +7,7 @@ from Classification_Data import Classification_Data
 import plotly.figure_factory as ff
 import pandas as pd
 import seaborn as sn
+from zipfile import ZipFile
 
 
 
@@ -39,13 +40,11 @@ class NN_Classification(Classification):
         self.plot(data_obj)
 
     def get_model(self, data_obj):
-        self.model = tf.keras.models.Sequential([
-            tf.keras.Input(shape=(self.evidence.shape[1])),
-            tf.keras.layers.Dense(64, activation='relu'),
-            tf.keras.layers.Dense(64, activation='relu'),
-            tf.keras.layers.Dropout(0.2),
-            tf.keras.layers.Dense(self.output_categories, activation='softmax')
-        ])
+        self.model = tf.keras.models.Sequential([tf.keras.Input(shape=(self.evidence.shape[1]))])
+        for layer in data_obj.hidden_layers:
+            self.model.add(tf.keras.layers.Dense(layer, activation=data_obj.activation_func))
+        self.model.add(tf.keras.layers.Dropout(0.2))
+        self.model.add(tf.keras.layers.Dense(self.output_categories, activation='softmax'))
         self.model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
     def plot(self, data_obj):
@@ -54,6 +53,7 @@ class NN_Classification(Classification):
         :param param: Which plots to display: 0=all, 1=accuracy, 2=loss, 3=confusion-matrix
         :return:
         """
+        # Loaded model has no history
         try:
             fig = plt.figure()
             plt.plot(self.history.history["accuracy"])
@@ -77,12 +77,13 @@ class NN_Classification(Classification):
 
 def main(file):
     data = pd.read_csv(file, delimiter=";")
-    data_obj = Classification_Data(data=data)
-    print(type(data_obj.model))
-    filename = 'model.sav'
-    data_obj.model = keras.models.load_model('keras_model')
+    data_obj = Classification_Data(data=data, hidden_layers=[128, 128, 128], y_label="Class", x_labels=["Atr1", "Atr2"])
+
+    filename = 'model.zip' # TODO up and download as zip
+    #data_obj.model = keras.models.load_model('keras_model')
     classifier = NN_Classification(data_obj)
     #data_obj.model.save('keras_model')
+    print(data_obj.model.summary())
     plt.show()
 
 
