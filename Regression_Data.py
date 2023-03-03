@@ -11,7 +11,7 @@ class Regression_Data:
     # Share/Percentage of Data used for testing
     test_size: float = 0.2
     # with x_labels, if None all will be used
-    x_labels: str = None
+    x_labels: list[str] = None
     # title of column with labels for classification, if None last column will be used
     y_label: str = None
     # number of values to use from the dataset

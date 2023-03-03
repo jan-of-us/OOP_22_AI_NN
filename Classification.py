@@ -3,21 +3,22 @@ from sklearn.metrics import confusion_matrix
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sn
+from Classification_Data import Classification_Data
 
 
 class Classification:
     """
     Class for all classification methods
     """
-    def __init__(self, data, test_size=0.2):
+    def __init__(self, data_obj: Classification_Data):
         """
         :param data: dataframe containing the dataset
         :param test_size: share of data that is used for testing. Default: 0.2
         """
         # initialize necessary variables
         self.evidence, self.labels, self.model = pd.DataFrame, pd.DataFrame, None
-        self.data = data
-        self.test_size = test_size
+        self.data = data_obj.data
+        self.test_size = data_obj.test_size
 
         # split the dataset into evidence and labels
         self.split_evidence_labels()

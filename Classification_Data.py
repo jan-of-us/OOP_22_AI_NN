@@ -11,7 +11,7 @@ class Classification_Data:
     # Share/Percentage of Data used for testing
     test_size: float = 0.2
     # with x_labels, if None all will be used
-    x_labels: str = None
+    x_labels: list[str] = None
     # title of column with labels for classification, if None last column will be used
     y_label: str = None
     # number and nodes for hidden layers as array 3 layers with 64 nodes each: [64, 64, 64]
@@ -26,6 +26,9 @@ class Classification_Data:
     # Number of trees
     trees: int = 100
 
+    # classifier model
+    model: None = None
+
     # OUTPUTS
     # Plots
     confusion_matrix: plt.Figure = plt.figure(figsize=(10, 6))
@@ -34,5 +37,6 @@ class Classification_Data:
 
     # text based
     result_string: str = ""
+    feature_importance_dict: dict = None
 
 

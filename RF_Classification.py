@@ -1,20 +1,24 @@
 import matplotlib.pyplot as plt
-
+import pandas as pd
+import pickle
 from data_import import import_csv
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from Classification import Classification
-
+from Classification_Data import Classification_Data
 
 def main():
     # import test data
-    data = import_csv("Data/divorce.csv")
+    data = pd.read_csv("Data/divorce.csv", delimiter=";")
+    data_obj = Classification_Data(data=data)
     # Create classifier class
-    classifier = RF_Classification(data)
-    classifier.plot()
+    filename = 'model.sav'
+    data_obj.model = pickle.load(open(filename, 'rb'))
+
+    classifier = RF_Classification(data_obj)
+    #pickle.dump(data_obj.model, open(filename, 'wb'))
+
     plt.show()
-    print(classifier)
-    print(classifier.print_results())
 
 
 class RF_Classification(Classification):
@@ -26,17 +30,24 @@ class RF_Classification(Classification):
     :param k: trees k=100
     :return: prints evaluation to terminal
     """
-    def __init__(self, data, test_size=0.2, n=100):
-        super().__init__(data, test_size)
+    def __init__(self, data_obj: Classification_Data):
+        super().__init__(data_obj)
 
-        self.n = n
+        self.n = data_obj.trees
         self.sensitivity, self.specificity, self.predictions = int(), int(), None
 
-        self.run_classifier()
+        self.run_classifier(data_obj)
+        self.plot(data_obj)
 
-    def run_classifier(self):
+    def run_classifier(self, data_obj):
         # train the model
-        self.model = self.train_model()
+        if data_obj.model is not None and isinstance(data_obj.model, RandomForestClassifier):
+            self.model = data_obj.model
+            print("Model loaded")
+        else:
+            self.model = self.train_model()
+            data_obj.model = self.model
+            print("Model created")
 
         # make predictions
         self.predictions = self.model.predict(self.x_test)
@@ -51,9 +62,9 @@ class RF_Classification(Classification):
         print(dict(zip(self.x_test.columns, self.model.feature_importances_)))
 
     def train_model(self):
-        neigh = RandomForestClassifier(n_estimators=self.n)
-        neigh.fit(self.evidence, self.labels)
-        return neigh
+        forest = RandomForestClassifier(n_estimators=self.n)
+        forest.fit(self.evidence, self.labels)
+        return forest
 
     def evaluate(self):
         pos_label = 0
@@ -85,8 +96,8 @@ class RF_Classification(Classification):
                     f"True Negative Rate: {100 * self.specificity:.2f}%"
         return results
 
-    def plot(self):
-        super().plot_confusion_matrix(y_test=self.y_test, predictions=self.predictions)
+    def plot(self, data_obj):
+        data_obj.confusion_matrix = super().plot_confusion_matrix(y_test=self.y_test, predictions=self.predictions)
 
 
 if __name__ == "__main__":
