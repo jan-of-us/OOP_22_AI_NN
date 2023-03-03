@@ -2,40 +2,32 @@
 
 ## Implementation into the GUI
 ### User Inputs:
-#### General: 
-  * data -> pandas.dataframe
-  * test_size -> share of data that is used for testing
-##### KN_Classification
-* k -> specifies how many neighbouring nodes are used for classification
-
-#### Random Forest
-* tbd
-#### Neural Network classifier
-* training epochs
+Classification_Data and Regression_Data implement all user inputs and handle outputs from the classes.
 
 | Input Name       | Type             | Range / Values | Default Value | Used for      | Description                                                                                                                                 | Implementation suggestions |
 |------------------|------------------|----------------|---------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|
 | Data             | Pandas Dataframe | -              | -             | General       | Contains the dataset                                                                                                                        ||
 | test_size        | float            | 0.2-0.8        | 0.2           | General       | Share/Percentage of Data used for testing                                                                                                   ||
+| x_labels         | list[str]        |                | None          | General       | Labels used as evidence for the classification, if None all but y will be used                                                              |                            |
+| y_label          | str              |                | None          | General       | Label of column that contains the classes, if None final column will be used                                                                |                            |
 | hidden_layers    | array of ints    |                | [64]          | Neural Net    | Nodes for each hidden layer, every entry in the array creates a hidden layer with as many nodes as the entry's value                        | textbox with csv           |
 | training_epochs  | int              |                | 10            | Neural Net    |                                                                                                                                             ||
 | activation_func  | string           |                | "relu"        | Neural Net    | https://www.tensorflow.org/api_docs/python/tf/keras/activations                                                                             | dropdown menu              |
 | validation_split | Bool             |                | True          | Neural Net    | Whether during the training a part of the data will already be used for testing after each epoch, needed for accuracy/loss per epoch graphs | checkbox                   |
 | trees            | int              |                | 100           | Random Forest | Number of trees in the forest                                                                                                               ||
-|                  |                  |                |               |               |                                                                                                                                             ||
+| model            |                  |                | None          | General       | Allows user uploaded pre-trained models                                                                                                     ||
 |                  |                  |                |               |               |                                                                                                                                             ||
 
 
 
 ### Outputs:
 #### General:
-  * __str__ method returns a description of the methods used
-  * print_results method returns the results in text form
-  * plot(param) method returns different plots
-  * feature importance 
+  * result_string contains results in text based form
+  * feature_importance_dict: dictionary with the importance of each attribute
 #### Plots
 * confusion matrix
 * for NN: accuracy for each epoch training + testing, losses
+* feature importance pie chart
 
 ### Example Code to run the neural network classifier and plot the confusion matrix:
 ```
@@ -44,13 +36,14 @@ pip install -r requirements.txt
 
 ```
 from NN_Classification import NN_Classification
+from Classification_Data import Classification_Data
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn
 
 data = pd.read_csv(filename, sep=";")
-classifier = NN_Classification(data)
-fig = classifier.plot(3)
+data_obj = Classification_Data(data=data)
+classifier = NN_Classification(data_obj)
 plt.show()
 ```
 
