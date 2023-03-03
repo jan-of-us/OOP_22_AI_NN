@@ -7,6 +7,7 @@ from Classification_Data import Classification_Data
 import plotly.figure_factory as ff
 import pandas as pd
 import seaborn as sn
+from sklearn.metrics import accuracy_score
 from zipfile import ZipFile
 
 
@@ -36,6 +37,7 @@ class NN_Classification(Classification):
 
         # predictions for confusion matrix
         self.predictions = self.model.predict(self.x_test)
+        data_obj.accuracy_score = accuracy_score(self.y_test, tf.argmax(self.predictions, 1))
 
         # testing the network on the testing data
         self.model.evaluate(self.x_test, self.y_test, verbose=2)
@@ -90,6 +92,7 @@ def main(file):
     #data_obj.model.save('keras_model')
     print(data_obj.model.summary())
     plt.show()
+    print(data_obj.accuracy_score)
 
 
 if __name__ == "__main__":

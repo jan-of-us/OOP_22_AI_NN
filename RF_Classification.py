@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from Classification import Classification
 from Classification_Data import Classification_Data
+from sklearn.metrics import accuracy_score
 
 def main():
     # import test data
@@ -13,12 +14,13 @@ def main():
     data_obj = Classification_Data(data=data)
     # Create classifier class
     filename = 'model.sav'
-    data_obj.model = pickle.load(open(filename, 'rb'))
+    #data_obj.model = pickle.load(open(filename, 'rb'))
 
     classifier = RF_Classification(data_obj)
     #pickle.dump(data_obj.model, open(filename, 'wb'))
 
     plt.show()
+    print(data_obj.accuracy_score)
 
 
 class RF_Classification(Classification):
@@ -38,6 +40,7 @@ class RF_Classification(Classification):
 
         self.run_classifier(data_obj)
         self.plot(data_obj)
+        data_obj.accuracy_score = accuracy_score(self.y_test, self.predictions)
 
     def run_classifier(self, data_obj):
         # train the model

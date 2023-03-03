@@ -38,5 +38,6 @@ class Classification_Data:
     # text based
     result_string: str = ""
     feature_importance_dict: dict = None
+    accuracy_score: float = 0
 
 

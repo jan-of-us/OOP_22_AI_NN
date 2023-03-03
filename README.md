@@ -24,6 +24,7 @@ Classification_Data and Regression_Data implement all user inputs and handle out
 #### General:
   * result_string contains results in text based form
   * feature_importance_dict: dictionary with the importance of each attribute
+  * accuracy_score
 #### Plots
 * confusion matrix
 * for NN: accuracy for each epoch training + testing, losses
