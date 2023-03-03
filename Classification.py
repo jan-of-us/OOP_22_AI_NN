@@ -44,8 +44,6 @@ class Classification:
             self.labels = self.data[self.data.columns[-1]]
         else:
             self.labels = self.data[data_obj.y_label]
-        print(self.evidence)
-        print(self.labels)
 
     def return_data(self):
         """

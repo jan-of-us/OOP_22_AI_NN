@@ -25,7 +25,10 @@ class NN_Classification(Classification):
             # create the neural network
             self.get_model(data_obj)
             # train the neural network
-            self.history = self.model.fit(self.x_train, self.y_train, validation_split=0.2, epochs=data_obj.training_epochs)
+            if data_obj.validation_split is False:
+                self.history = self.model.fit(self.x_train, self.y_train, epochs=data_obj.training_epochs)
+            else:
+                self.history = self.model.fit(self.x_train, self.y_train, validation_split=0.2, epochs=data_obj.training_epochs)
             data_obj.model = self.model
             print("Model created")
 
@@ -67,6 +70,8 @@ class NN_Classification(Classification):
             plt.grid()
             data_obj.accuracy_per_epoch = fig
         except AttributeError:
+            data_obj.accuracy_per_epoch = None
+        except KeyError:
             data_obj.accuracy_per_epoch = None
 
         # convert predictions from percentages to labels
