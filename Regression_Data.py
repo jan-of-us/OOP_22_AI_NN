@@ -27,6 +27,8 @@ class Regression_Data:
     # Number of trees
     trees: int = 100
 
+    model: None = None
+
     # OUTPUTS
     # Plots
     prediction: plt.Figure = plt.figure(figsize=(10, 6))

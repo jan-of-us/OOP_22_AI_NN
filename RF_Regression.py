@@ -4,6 +4,7 @@ from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 from Regression import Regression
 from Regression_Data import Regression_Data
 import pandas as pd
+import pickle
 
 
 def main():
@@ -19,11 +20,16 @@ def main():
     data['minute'] = data['date'].dt.minute
 
 
-    # Create Data Class
-    data_obj = Regression_Data(data=data)
+    # Create Data Class, start index and n_values atm only used for plotting, training and prediction done on all data
+    data_obj = Regression_Data(data=data, x_labels=["T1", "RH_1", "hour"], y_label="Appliances", n_values=50, start_value_index=100)
     print(data_obj)
+
+    filename = 'model.sav'
+    # data_obj.model = pickle.load(open(filename, 'rb'))
+
     # Create classifier class
     regressor = RF_Regression(data_obj)
+    # pickle.dump(data_obj.model, open(filename, 'wb'))
     plt.show()
 
 
@@ -37,7 +43,7 @@ class RF_Regression(Regression):
     :return: prints evaluation to terminal
     """
     def __init__(self, data_obj: Regression_Data):
-        super().__init__(data_obj.data, data_obj.test_size)
+        super().__init__(data_obj)
 
         self.k = data_obj.trees
         self.sensitivity, self.specificity, self.predictions = int(), int(), None
@@ -47,41 +53,45 @@ class RF_Regression(Regression):
 
     def run_classifier(self, data_obj):
         # train the model
-        self.model = self.train_model()
+        if data_obj.model is not None and isinstance(data_obj.model, RandomForestRegressor):
+            self.model = data_obj.model
+            print("Model loaded")
+        else:
+            self.model = self.train_model()
+            data_obj.model = self.model
+            print("Model created")
 
         # make predictions
         self.predictions = self.model.predict(self.x_test)
         # get evaluation
-        # self.evaluate()
+        self.evaluate(data_obj)
 
+
+        # Print results
+        self.print_results(data_obj)
+
+
+    def train_model(self):
+        forest = RandomForestRegressor(n_estimators=self.k)
+        forest.fit(self.evidence, self.labels)
+        return forest
+
+    def evaluate(self, data_obj):
         data_obj.r2_score = r2_score(self.y_test, self.predictions)
         data_obj.mean_abs_error = mean_absolute_error(self.y_test, self.predictions)
         data_obj.mean_sqr_error = mean_squared_error(self.y_test, self.predictions)
         data_obj.feature_importance_dict = dict(zip(self.x_test.columns, self.model.feature_importances_))
 
-        # Print results
-
-        #print(self.feature_importance)
-
-    def train_model(self):
-        neigh = RandomForestRegressor(n_estimators=self.k)
-        neigh.fit(self.evidence, self.labels)
-        return neigh
-
-    def evaluate(self):
-        raise NotImplementedError
-
     def __str__(self):
         return "This method implements the random forest classification."
 
-    def print_results(self):
-        # TODO, part of data class??
-        raise NotImplementedError
+    def print_results(self, data_obj):
+        data_obj.result_string = f"The classifiers R2_Score is {data_obj.r2_score}"
 
     def plot(self, data_obj):
         fig, ax = plt.subplots()
-        plt.plot(self.y_test["lights"].to_numpy()[:50], color='red', label='Real data')
-        plt.plot(self.predictions[:, 1][:50], color='blue', label='Predicted data')
+        plt.plot(self.y_test.to_numpy()[data_obj.start_value_index:data_obj.start_value_index+data_obj.n_values], color='red', label='Real data')
+        plt.plot(self.predictions[data_obj.start_value_index:data_obj.start_value_index+data_obj.n_values], color='blue', label='Predicted data')
         plt.title('Prediction')
         plt.legend()
         data_obj.prediction = fig
