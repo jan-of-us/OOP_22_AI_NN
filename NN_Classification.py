@@ -40,6 +40,7 @@ class NN_Classification(Classification):
         self.model.evaluate(self.x_test, self.y_test, verbose=2)
 
         self.plot(data_obj)
+        data_obj.result_string = f"The neural network classifier has an accuracy of {data_obj.accuracy_score}"
 
     def get_model(self, data_obj):
         self.model = tf.keras.models.Sequential([tf.keras.Input(shape=(self.evidence.shape[1]))])

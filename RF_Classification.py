@@ -41,6 +41,7 @@ class RF_Classification(Classification):
         data_obj.feature_importance_dict = dict(zip(self.x_test.columns, self.model.feature_importances_))
         self.plot(data_obj)
         data_obj.accuracy_score = accuracy_score(self.y_test, self.predictions)
+        data_obj.result_string = f"The neural network classifier has an accuracy of {data_obj.accuracy_score}"
 
     def run_classifier(self, data_obj):
         # train the model
