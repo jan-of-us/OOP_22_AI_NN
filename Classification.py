@@ -45,12 +45,6 @@ class Classification:
         else:
             self.labels = self.data[data_obj.y_label]
 
-    def return_data(self):
-        """
-        Returns the data in it's original format but manipulated state
-        :return: dataframe
-        """
-        return self.data
 
     def __str__(self):
         """

@@ -58,7 +58,7 @@ class NN_Classification(Classification):
         :param param: Which plots to display: 0=all, 1=accuracy, 2=loss, 3=confusion-matrix
         :return:
         """
-        # Loaded model has no history
+
         try:
             fig = plt.figure()
             plt.plot(self.history.history["accuracy"])
@@ -72,8 +72,10 @@ class NN_Classification(Classification):
             plt.grid()
             data_obj.accuracy_per_epoch = fig
         except AttributeError:
+            # Loaded model has no history
             data_obj.accuracy_per_epoch = None
         except KeyError:
+            # if validation split is disabled
             data_obj.accuracy_per_epoch = None
 
         # convert predictions from percentages to labels

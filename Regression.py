@@ -44,13 +44,6 @@ class Regression:
         print(self.evidence)
         print(self.labels)
 
-    def return_data(self):
-        """
-        Returns the data in it's original format but manipulated state
-        :return: dataframe
-        """
-        raise NotImplementedError
-
     def __str__(self):
         """
         Returns a string with infos about the used methods and the achieved results
