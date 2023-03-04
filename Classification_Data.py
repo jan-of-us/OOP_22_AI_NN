@@ -8,25 +8,26 @@ class Classification_Data:
     # INPUTS
     # data
     data: pd.DataFrame
-    # Share/Percentage of Data used for testing
+    # Share of Data that is used for testing
     test_size: float = 0.2
-    # with x_labels, if None all will be used
+    # Labels of columns used as input, if None all will be used
     x_labels: list[str] = None
-    # title of column with labels for classification, if None last column will be used
+    # Label of column used as Output/Classification Categories, if None last column will be used
     y_label: str = None
-    # number and nodes for hidden layers as array 3 layers with 64 nodes each: [64, 64, 64]
+    # number and nodes for hidden layers as array. Ex: 3 layers with 64 nodes each: [64, 64, 64], more nodes and
+    # layers lead to longer training times
     hidden_layers: list[int] = (64, 64)
-    # number of training epochs
+    # number of training epochs, higher number leads to longer training time
     training_epochs: int = 10
-    # activation functions from tf.keras.activations
+    # activation functions from tf.keras.activations, some might work better than others
     activation_func: str = "relu"
     # Whether during the training a part of the data will already be used for testing after each epoch,
     # needed for accuracy/loss per epoch graphs
     validation_split: bool = True
-    # Number of trees
+    # Number of trees in the forest, higher number leads to higher training times
     trees: int = 100
 
-    # classifier model
+    # classifier model, type must match chosen class or model will be ignored
     model: None = None
 
     # OUTPUTS
