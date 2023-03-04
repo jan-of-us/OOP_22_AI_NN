@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import pickle
-from data_import import import_csv
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from Classification import Classification
@@ -11,7 +10,7 @@ from sklearn.metrics import accuracy_score
 def main():
     # import test data
     data = pd.read_csv("Data/divorce.csv", delimiter=";")
-    data_obj = Classification_Data(data=data)
+    data_obj = Classification_Data(data=data, trees=10000)
     # Create classifier class
     filename = 'model.sav'
     #data_obj.model = pickle.load(open(filename, 'rb'))

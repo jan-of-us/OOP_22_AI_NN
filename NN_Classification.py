@@ -1,6 +1,5 @@
 import keras.models
 import tensorflow as tf
-from data_import import import_csv
 from Classification import Classification
 import matplotlib.pyplot as plt
 from Classification_Data import Classification_Data
@@ -86,7 +85,7 @@ class NN_Classification(Classification):
 
 def main(file):
     data = pd.read_csv(file, delimiter=";")
-    data_obj = Classification_Data(data=data, hidden_layers=[4096, 4096, 4096, 4096, 4096], test_size=0.2)
+    data_obj = Classification_Data(data=data, hidden_layers=[128, 128], test_size=0.2, training_epochs=100)
 
     filename = 'model.zip' # TODO up and download as zip
     #data_obj.model = keras.models.load_model('keras_model')

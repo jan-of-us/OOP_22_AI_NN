@@ -21,7 +21,7 @@ def main():
 
 
     # Create Data Class, start index and n_values atm only used for plotting, training and prediction done on all data
-    data_obj = Regression_Data(data=data, x_labels=["T1", "RH_1", "hour"], y_label="Appliances", n_values=50, start_value_index=100)
+    data_obj = Regression_Data(data=data, x_labels=["T1", "RH_1", "hour"], y_label="Appliances", n_values=50, test_size=0.99)
     print(data_obj)
 
     filename = 'model.sav'
