@@ -86,7 +86,7 @@ class NN_Classification(Classification):
 
 def main(file):
     data = pd.read_csv(file, delimiter=";")
-    data_obj = Classification_Data(data=data, hidden_layers=[128, 128, 128], y_label="Class", x_labels=["Atr1", "Atr2"])
+    data_obj = Classification_Data(data=data, hidden_layers=[4096, 4096, 4096, 4096, 4096], test_size=0.2)
 
     filename = 'model.zip' # TODO up and download as zip
     #data_obj.model = keras.models.load_model('keras_model')
@@ -94,7 +94,7 @@ def main(file):
     #data_obj.model.save('keras_model')
     print(data_obj.model.summary())
     plt.show()
-    print(data_obj.accuracy_score)
+    #print(data_obj.accuracy_score)
 
 
 if __name__ == "__main__":
