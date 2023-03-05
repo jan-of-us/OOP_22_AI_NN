@@ -84,9 +84,9 @@ class NN_Classification(Classification):
 
 def main(file):
     data = pd.read_csv(file, delimiter=";")
-    data_obj = Classification_Data(data=data, hidden_layers=[128, 128], activation_func="relu")
+    data_obj = Classification_Data(data=data)
     dir = './keras_model'
-    filename = 'model' # TODO up and download as zip
+    filename = 'keras_model'
     zip_name = filename + ".zip"
     # loading model from zip
     #with ZipFile(zip_name, 'r') as zip:
@@ -95,8 +95,8 @@ def main(file):
     classifier = NN_Classification(data_obj)
 
     # saving model to zip folder
-    #data_obj.model.save(dir)
-    #shutil.make_archive(filename, 'zip', dir)
+    data_obj.model.save(dir)
+    shutil.make_archive(filename, 'zip', dir)
 
     print(data_obj.model.summary())
     plt.show()

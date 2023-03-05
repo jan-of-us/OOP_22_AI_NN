@@ -36,14 +36,15 @@ class Classification:
             if data_obj.y_label is None:
                 self.evidence = self.data.iloc[:, :-1]
             else:
-                self.evidence = self.data
-                self.evidence.drop(labels=data_obj.y_label, axis='columns')
+                self.evidence = self.data.drop(columns=[data_obj.y_label])
         else:
             self.evidence = self.data[data_obj.x_labels]
         if data_obj.y_label is None:
             self.labels = self.data[self.data.columns[-1]]
         else:
             self.labels = self.data[data_obj.y_label]
+        print(self.evidence)
+        print(self.labels)
 
 
     def __str__(self):
