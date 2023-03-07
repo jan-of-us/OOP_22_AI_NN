@@ -67,3 +67,29 @@ class Classification:
         fig, ax = plt.subplots()
         ax = sn.heatmap(conf_matrix, annot=True)
         return fig
+
+    @staticmethod
+    def evaluate(y_test, predictions):
+        pos_label = 0
+        neg_label = 0
+        corr_pos_pred = 0
+        corr_neg_pred = 0
+        true_labels = y_test.to_numpy()
+        for i in range(true_labels.shape[0]):
+            # specificity
+            if true_labels[i] == 0:
+                neg_label += 1
+                if predictions[i] == 0:
+                    corr_neg_pred += 1
+            # sensitivity
+            if true_labels[i] == 1:
+                pos_label += 1
+                if predictions[i] == 1:
+                    corr_pos_pred += 1
+        sensitivity = corr_pos_pred / float(pos_label)
+        specificity = corr_neg_pred / float(neg_label)
+        results = f"Correct: {(y_test == predictions).sum()}\n" \
+                  f"Incorrect: {(y_test != predictions).sum()}\n" \
+                  f"True Positive Rate: {100 * sensitivity:.2f}%\n" \
+                  f"True Negative Rate: {100 * specificity:.2f}%"
+        return results

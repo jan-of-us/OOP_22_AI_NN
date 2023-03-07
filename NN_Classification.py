@@ -38,9 +38,9 @@ class NN_Classification(Classification):
 
         # testing the network on the testing data
         self.model.evaluate(self.x_test, self.y_test, verbose=2)
-
+        data_obj.result_string = f"The neural network classifier has an accuracy of {data_obj.accuracy_score} \n"
+        data_obj.result_string += super().evaluate(self.y_test, tf.argmax(self.predictions, 1))
         self.plot(data_obj)
-        data_obj.result_string = f"The neural network classifier has an accuracy of {data_obj.accuracy_score}"
 
     def get_model(self, data_obj):
         self.model = tf.keras.models.Sequential([tf.keras.Input(shape=(self.evidence.shape[1]))])
@@ -100,7 +100,7 @@ def main(file):
 
     print(data_obj.model.summary())
     plt.show()
-    #print(data_obj.accuracy_score)
+    print(data_obj.result_string)
 
 
 if __name__ == "__main__":
