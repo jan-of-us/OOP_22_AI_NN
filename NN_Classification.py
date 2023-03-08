@@ -14,7 +14,7 @@ class NN_Classification(Classification):
         super().__init__(data_obj)
 
         # get the number of output categories from the dataset
-        self.output_categories = self.y_test.nunique()
+        self.output_categories = data_obj.data[data_obj.y_label].nunique()
 
         if data_obj.model is not None and isinstance(data_obj.model, tf.keras.models.Sequential):
             self.model = data_obj.model
@@ -92,9 +92,9 @@ def main(file):
     filename = 'keras_model'
     zip_name = filename + ".zip"
     # loading model from zip
-    with ZipFile(zip_name, 'r') as zip:
-        zip.extractall(path=dir)
-    data_obj.model = tf.keras.models.load_model(dir)
+    #with ZipFile(zip_name, 'r') as zip:
+    #    zip.extractall(path=dir)
+    #data_obj.model = tf.keras.models.load_model(dir)
     classifier = NN_Classification(data_obj)
 
     # saving model to zip folder

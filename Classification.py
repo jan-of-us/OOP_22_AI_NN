@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sn
 from Classification_Data import Classification_Data
+from sklearn.preprocessing import LabelEncoder
 
 
 class Classification:
@@ -12,12 +13,12 @@ class Classification:
     """
     def __init__(self, data_obj: Classification_Data):
         """
-        :param data: dataframe containing the dataset
-        :param test_size: share of data that is used for testing. Default: 0.2
+        :param data_obj: Classification_Data object
         """
         # initialize necessary variables
         self.evidence, self.labels, self.model = pd.DataFrame, pd.DataFrame, None
         self.data = data_obj.data
+        data_obj.data = self.encode()
         self.test_size = data_obj.test_size
 
         # split the dataset into evidence and labels
@@ -28,9 +29,20 @@ class Classification:
             self.evidence, self.labels, test_size=self.test_size
         )
 
+    def encode(self):
+        """
+        Encodes variables that are not integer or float format
+        :return: converted dataframe
+        """
+        label_encoder = LabelEncoder()
+        for value in self.data.select_dtypes(include=["object"]).columns.values:
+            self.data[value] = label_encoder.fit_transform(self.data[value])
+        return self.data
+
+
     def split_evidence_labels(self, data_obj):
         """
-        Splits given dataset into evidence and labels, requires labels to be last column of dataframe
+        Splits given dataset into evidence and labels
         """
         if data_obj.x_labels is None:
             if data_obj.y_label is None:
@@ -41,6 +53,7 @@ class Classification:
             self.evidence = self.data[data_obj.x_labels]
         if data_obj.y_label is None:
             self.labels = self.data[self.data.columns[-1]]
+            data_obj.y_label = self.data.columns[-1]
         else:
             self.labels = self.data[data_obj.y_label]
         print(self.evidence)
@@ -70,6 +83,12 @@ class Classification:
 
     @staticmethod
     def evaluate(y_test, predictions):
+        """
+        Evaluate Predictions
+        :param y_test: real labels
+        :param predictions: predicted labels
+        :return: String with Results
+        """
         pos_label = 0
         neg_label = 0
         corr_pos_pred = 0
