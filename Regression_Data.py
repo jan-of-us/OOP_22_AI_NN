@@ -12,7 +12,7 @@ class Regression_Data:
     test_size: float = 0.2
     # with x_labels, if None all will be used
     x_labels: list[str] = None
-    # title of column with labels for classification, if None last column will be used
+    # title of column with labels for regression, if None last column will be used
     y_label: str = None
     # number of values to use from the dataset
     n_values: int = 1

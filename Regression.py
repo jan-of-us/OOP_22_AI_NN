@@ -39,6 +39,7 @@ class Regression:
             self.evidence = self.data[data_obj.x_labels]
         if data_obj.y_label is None:
             self.labels = self.data[self.data.columns[-1]]
+            data_obj.y_label = self.data.columns[-1]
         else:
             self.labels = self.data[data_obj.y_label]
         print(self.evidence)
