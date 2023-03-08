@@ -55,7 +55,7 @@ class Classification:
             self.labels = self.data[self.data.columns[-1]]
             data_obj.y_label = self.data.columns[-1]
         else:
-            self.labels = self.data[data_obj.y_label]
+            self.labels = self.data[data_obj.y_label].subtract(self.data[data_obj.y_label].min())
         print(self.evidence)
         print(self.labels)
 
@@ -105,11 +105,11 @@ class Classification:
                 pos_label += 1
                 if predictions[i] == 1:
                     corr_pos_pred += 1
-        sensitivity = corr_pos_pred / float(pos_label)
-        specificity = corr_neg_pred / float(neg_label)
+        # sensitivity = corr_pos_pred / float(pos_label)
+        # specificity = corr_neg_pred / float(neg_label)
         results = f"Detailed results on testing set:\n"\
                   f"Correct: {(y_test == predictions).sum()}\n" \
                   f"Incorrect: {(y_test != predictions).sum()}\n" \
-                  f"True Positive Rate: {100 * sensitivity:.2f}%\n" \
-                  f"True Negative Rate: {100 * specificity:.2f}%"
+                #   f"True Positive Rate: {100 * sensitivity:.2f}%\n" \
+                #   f"True Negative Rate: {100 * specificity:.2f}%"
         return results
