@@ -13,7 +13,7 @@ def main():
     data_obj = Classification_Data(data=data, trees=100, test_size=0.5, x_labels=["Atr1"])
     # Create classifier class
     filename = 'model.sav'
-    data_obj.model = pickle.load(open(filename, 'rb'))
+    #data_obj.model = pickle.load(open(filename, 'rb'))
 
     classifier = RF_Classification(data_obj)
     #pickle.dump(data_obj.model, open(filename, 'wb'))
@@ -38,7 +38,7 @@ class RF_Classification(Classification):
         self.predictions = None
 
         self.run_classifier(data_obj)
-        data_obj.feature_importance_dict = dict(zip(self.x_test.columns, self.model.feature_importances_))
+
 
 
     def run_classifier(self, data_obj):
@@ -59,6 +59,7 @@ class RF_Classification(Classification):
             data_obj.result_string = f"The random forest classifier has a {accuracy_score(self.y_train, self.model.predict(self.x_train)):.2%} accuracy on the training data.\n"
             data_obj.result_string += f"The random forest classifier has a {data_obj.accuracy_score:.2%} accuracy on the testing data.\n"
             data_obj.result_string += super().evaluate(self.y_test, self.predictions)
+            data_obj.feature_importance_dict = dict(zip(self.x_test.columns, self.model.feature_importances_))
             self.plot(data_obj)
         except ValueError:
             data_obj.result_string = "The loaded model does not match the set parameters, please try again!"
