@@ -31,16 +31,19 @@ class NN_Classification(Classification):
             print("Model created")
 
 
+        try:
+            # predictions for confusion matrix
+            self.predictions = self.model.predict(self.x_test)
+            data_obj.accuracy_score = accuracy_score(self.y_test, tf.argmax(self.predictions, 1))
 
-        # predictions for confusion matrix
-        self.predictions = self.model.predict(self.x_test)
-        data_obj.accuracy_score = accuracy_score(self.y_test, tf.argmax(self.predictions, 1))
-
-        # testing the network on the testing data
-        self.model.evaluate(self.x_test, self.y_test, verbose=2)
-        data_obj.result_string = f"The neural network classifier has an accuracy of {data_obj.accuracy_score} \n"
-        data_obj.result_string += super().evaluate(self.y_test, tf.argmax(self.predictions, 1))
-        self.plot(data_obj)
+            # testing the network on the testing data
+            self.model.evaluate(self.x_test, self.y_test, verbose=2)
+            data_obj.result_string = f"The neural network classifier has a {accuracy_score(self.y_train, tf.argmax(self.model.predict(self.x_train), 1)):.2%} accuracy on the training data.\n"
+            data_obj.result_string += f"The neural network classifier has a {data_obj.accuracy_score:.2%} accuracy on the testing data.\n"
+            data_obj.result_string += super().evaluate(self.y_test, tf.argmax(self.predictions, 1))
+            self.plot(data_obj)
+        except ValueError:
+            data_obj.result_string = "The loaded model does not match the set parameters, please try again!"
 
     def get_model(self, data_obj):
         self.model = tf.keras.models.Sequential([tf.keras.Input(shape=(self.evidence.shape[1]))])
@@ -89,14 +92,14 @@ def main(file):
     filename = 'keras_model'
     zip_name = filename + ".zip"
     # loading model from zip
-    #with ZipFile(zip_name, 'r') as zip:
-    #    zip.extractall(path=dir)
-    #data_obj.model = keras.models.load_model(dir)
+    with ZipFile(zip_name, 'r') as zip:
+        zip.extractall(path=dir)
+    data_obj.model = tf.keras.models.load_model(dir)
     classifier = NN_Classification(data_obj)
 
     # saving model to zip folder
-    data_obj.model.save(dir)
-    shutil.make_archive(filename, 'zip', dir)
+    #data_obj.model.save(dir)
+    #shutil.make_archive(filename, 'zip', dir)
 
     print(data_obj.model.summary())
     plt.show()

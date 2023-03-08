@@ -88,7 +88,8 @@ class Classification:
                     corr_pos_pred += 1
         sensitivity = corr_pos_pred / float(pos_label)
         specificity = corr_neg_pred / float(neg_label)
-        results = f"Correct: {(y_test == predictions).sum()}\n" \
+        results = f"Detailed results on testing set:\n"\
+                  f"Correct: {(y_test == predictions).sum()}\n" \
                   f"Incorrect: {(y_test != predictions).sum()}\n" \
                   f"True Positive Rate: {100 * sensitivity:.2f}%\n" \
                   f"True Negative Rate: {100 * specificity:.2f}%"
