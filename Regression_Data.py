@@ -30,6 +30,8 @@ class Regression_Data:
     activation_func: str = "relu"
     # Number of trees
     trees: int = 100
+    # wether the data will be scaled
+    scale: bool = True
 
     model: None = None
 

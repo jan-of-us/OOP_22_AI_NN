@@ -1,6 +1,7 @@
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from Regression_Data import Regression_Data
+from sklearn.preprocessing import MinMaxScaler
 
 
 class Regression:
@@ -15,6 +16,9 @@ class Regression:
         # initialize necessary variables
         self.features, self.target, self.model = pd.DataFrame, pd.DataFrame, None
         self.data = data_obj.data
+        if data_obj.scale is True:
+            self.scaler = MinMaxScaler()
+            self.data[self.data.columns] = self.scaler.fit_transform(self.data[self.data.columns])
         self.test_size = data_obj.test_size
 
         # split the dataset into evidence and labels

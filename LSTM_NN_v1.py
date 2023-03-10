@@ -1,30 +1,30 @@
 import numpy as np
+from Regression import Regression
 import pandas as pd
-#from Regression_Data import NN_LSTMModelGUI
-import matplotlib as plt
+from Regression_Data import Regression_Data
+import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 import tensorflow as tf
 
-class NN_LSTMModel:
-    def __init__(self, train_data, target_col, val_data=None, alpha=0.01, window_length=720, batch_size=32, hidden_layers=3):
+class NN_LSTMModel(Regression):
+    def __init__(self, data_obj: Regression_Data):
         """
         Initializes an instance of NN_LSTMModel.
-        Args:
-            train_data (pandas.DataFrame): Training data with features and target variable.
-            target_col (str): Name of the target variable column in train_data.
-            val_data (pandas.DataFrame, optional): Validation data with the same columns as train_data.
-            alpha (float, optional): Learning rate of the optimizer. Default is 0.01.
-            window_length (int, optional): Number of previous time steps to use as input for predicting the next time step. Default is 720 - 5 days of data.
-            batch_size (int, optional): Number of samples per gradient update. Default is 32.
-            hidden_layers (array of int, optional): Number of hidden layers. Default is 3.
+        :param data_obj: Regression Data object
         """
-        self.train_data = train_data
-        self.target_col = target_col
-        self.val_data = val_data
-        self.alpha = alpha
-        self.window_length = window_length
-        self.batch_size = batch_size
-        self.hidden_layers = hidden_layers
+        super().__init__(data_obj)
+        self.train_data = data_obj.data
+        self.target_col = data_obj.y_label
+        self.alpha = data_obj.alpha
+        self.window_length = data_obj.window_length
+        self.batch_size = data_obj.batch_size
+        self.hidden_layers = data_obj.hidden_layers
+
+        self.preprocess_data()
+        self.create_dataset(self.data.to_numpy(), self.window_length)
+        self.fit()
+        self.predict(data=self.data)
+        self.plot_results()
 
     def preprocess_data(self):
         """
@@ -36,11 +36,8 @@ class NN_LSTMModel:
         """
         scaler = MinMaxScaler()
         train_scaled = scaler.fit_transform(self.train_data)
-        if self.val_data is not None:
-            val_scaled = scaler.transform(self.val_data)
-            return train_scaled, val_scaled, scaler
-        else:
-            return train_scaled, scaler
+
+        return train_scaled, scaler
 
     def create_dataset(self, data, window_length):
         """
@@ -63,16 +60,16 @@ class NN_LSTMModel:
         """
         Trains the LSTM model using the training data and validation data (if available).
         """
-        train_data_scaled, val_data_scaled, scaler = self.preprocess_data()
+        train_data_scaled, scaler = self.preprocess_data()
         X_train, y_train = self.create_dataset(train_data_scaled, self.window_length)
         model = tf.keras.Sequential()
         for layer in self.hidden_layers:
             model.add(tf.keras.layers.LSTM(layer, return_sequences=True, input_shape=(self.window_length, X_train.shape[2])))
-            model.add(tf.keras.layers.LeakyReLU(NN_LSTMModel.alpha))
+            model.add(tf.keras.layers.LeakyReLU(self.alpha))
         model.add(tf.keras.layers.Dropout(0.3))
         model.add(tf.keras.layers.Dense(self.train_data.shape[1]))
         model.compile(loss='mse', optimizer='adam', metrics=['mse'])
-        history = model.fit(X_train, y_train, epochs=50, batch_size=self.batch_size, validation_data=(val_data_scaled, None), verbose=1)
+        history = model.fit(X_train, y_train, epochs=50, batch_size=self.batch_size, verbose=1)
         self.model = model
         self.scaler = scaler
         self.history = history
@@ -97,13 +94,33 @@ class NN_LSTMModel:
         train_target = self.train_data[self.window_length:]
         plt.plot(train_target, label='Actual')
         plt.plot(train_pred, label='Predicted')
-        if self.val_data is not None:
-            val_pred_scaled = self.model.predict(val_data_scaled[:-self.window_length])
-            val_pred = scaler.inverse_transform(val_pred_scaled)
-            val_target = self.val_data[self.window_length:]
-            plt.plot(val_target, label='Validation Actual')
-            plt.plot(val_pred, label='Validation Predicted')
         plt.xlabel('Time')
         plt.ylabel(self.target_col)
         plt.legend()
         plt.show()
+
+def main():
+    # import test data
+    data = pd.read_csv("Data/energydata_complete.csv", sep=",", parse_dates=["date"])
+
+    # data preprocessing
+    #data.dropna()
+    #data['year'] = data['date'].dt.year
+    #data['month'] = data['date'].dt.month
+    #data['day'] = data['date'].dt.day
+    #data['hour'] = data['date'].dt.hour
+    #data['minute'] = data['date'].dt.minute
+    data = data.drop(columns=["date"])
+
+
+    # Create Data Class, start index and n_values atm only used for plotting, training and prediction done on all data
+    data_obj = Regression_Data(data=data, y_label="lights", n_values=50)
+
+    # Create classifier class
+    regressor = NN_LSTMModel(data_obj)
+    plt.show()
+    print(data_obj.result_string)
+
+
+if __name__ == "__main__":
+    main()
