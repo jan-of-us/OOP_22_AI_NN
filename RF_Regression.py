@@ -18,10 +18,11 @@ def main():
     data['day'] = data['date'].dt.day
     data['hour'] = data['date'].dt.hour
     data['minute'] = data['date'].dt.minute
+    data = data.drop(columns=["date"])
 
 
     # Create Data Class, start index and n_values atm only used for plotting, training and prediction done on all data
-    data_obj = Regression_Data(data=data, x_labels=["T1", "RH_1", "hour"], y_label="Appliances", n_values=50, test_size=0.99)
+    data_obj = Regression_Data(data=data, y_label="lights", n_values=50, test_size=0.2, trees=500)
     print(data_obj)
 
     filename = 'model.sav'
@@ -31,16 +32,14 @@ def main():
     regressor = RF_Regression(data_obj)
     # pickle.dump(data_obj.model, open(filename, 'wb'))
     plt.show()
+    print(data_obj.result_string)
 
 
 class RF_Regression(Regression):
     """
     RandomForest-classification.
-    :param evidence: array of evidence, int or float,
-    :param labels: list of labels int
-    :param test_size: Size of testing data 0-1, default: 0.2 float,
-    :param k: trees k=100
-    :return: prints evaluation to terminal
+    :param data_obj: Regression_Data object
+    :return: data_obj with filled result variables
     """
     def __init__(self, data_obj: Regression_Data):
         super().__init__(data_obj)
@@ -73,7 +72,7 @@ class RF_Regression(Regression):
 
     def train_model(self):
         forest = RandomForestRegressor(n_estimators=self.k)
-        forest.fit(self.evidence, self.labels)
+        forest.fit(self.x_train, self.y_train)
         return forest
 
     def evaluate(self, data_obj):
@@ -86,7 +85,9 @@ class RF_Regression(Regression):
         return "This method implements the random forest classification."
 
     def print_results(self, data_obj):
-        data_obj.result_string = f"The classifiers R2_Score is {data_obj.r2_score}"
+        data_obj.result_string = f"The classifiers R2_Score is {data_obj.r2_score}.\n" \
+                                 f"The mean abs. error is {data_obj.mean_abs_error}.\n" \
+                                 f"The mean squared error is {data_obj.mean_sqr_error}."
 
     def plot(self, data_obj):
         fig, ax = plt.subplots()

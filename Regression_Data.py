@@ -14,10 +14,16 @@ class Regression_Data:
     x_labels: list[str] = None
     # title of column with labels for regression, if None last column will be used
     y_label: str = None
-    # number of values to use from the dataset
-    n_values: int = 1
-    # starting point
+    # Start of the plotting window from the testing set
     start_value_index: int = 0
+    # number of values to use from the testing set for plotting
+    n_values: int = 50
+    # Learning rate of the optimizer
+    alpha: float = 0.01
+    # Number of previous time steps to use as input for predicting the next time step
+    window_length: int = 720
+    # Number of samples per gradient update
+    batch_size: int = 32
     # number and nodes for hidden layers as array 3 layers with 64 nodes each: [64, 64, 64]
     hidden_layers: list[int] = (64, 64)
     # number of training epochs
