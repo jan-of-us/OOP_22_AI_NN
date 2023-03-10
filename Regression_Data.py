@@ -14,8 +14,6 @@ class Regression_Data:
     x_labels: list[str] = None
     # title of column with labels for regression, if None last column will be used
     y_label: str = None
-    # Start of the plotting window from the testing set
-    start_value_index: int = 0
     # number of values to use from the testing set for plotting
     n_values: int = 50
     # Learning rate of the optimizer

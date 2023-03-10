@@ -85,14 +85,14 @@ class RF_Regression(Regression):
         return "This method implements the random forest classification."
 
     def print_results(self, data_obj):
-        data_obj.result_string = f"The classifiers R2_Score is {data_obj.r2_score}.\n" \
-                                 f"The mean abs. error is {data_obj.mean_abs_error}.\n" \
+        data_obj.result_string = f"The classifiers R2_Score is {data_obj.r2_score}.\n\n" \
+                                 f"The mean abs. error is {data_obj.mean_abs_error}.\n\n" \
                                  f"The mean squared error is {data_obj.mean_sqr_error}."
 
     def plot(self, data_obj):
         fig, ax = plt.subplots()
-        plt.plot(self.y_test.to_numpy()[data_obj.start_value_index:data_obj.start_value_index+data_obj.n_values], color='red', label='Real data')
-        plt.plot(self.predictions[data_obj.start_value_index:data_obj.start_value_index+data_obj.n_values], color='blue', label='Predicted data')
+        plt.plot(self.y_test.to_numpy()[0:data_obj.n_values], color='red', label='Real data')
+        plt.plot(self.predictions[0:data_obj.n_values], color='blue', label='Predicted data')
         plt.title('Prediction')
         plt.legend()
         data_obj.prediction = fig
