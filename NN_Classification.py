@@ -88,18 +88,13 @@ class NN_Classification(Classification):
 def main(file):
     data = pd.read_csv(file, delimiter=";")
     data_obj = Classification_Data(data=data)
-    dir = './keras_model'
-    filename = 'keras_model'
-    zip_name = filename + ".zip"
-    # loading model from zip
-    #with ZipFile(zip_name, 'r') as zip:
-    #    zip.extractall(path=dir)
-    #data_obj.model = tf.keras.models.load_model(dir)
+    file = 'keras_model.h5'
+
+    #data_obj.model = tf.keras.models.load_model(file)
     classifier = NN_Classification(data_obj)
 
     # saving model to zip folder
-    #data_obj.model.save(dir)
-    #shutil.make_archive(filename, 'zip', dir)
+    #data_obj.model.save(file)
 
     print(data_obj.model.summary())
     plt.show()
