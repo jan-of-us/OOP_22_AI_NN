@@ -1,41 +1,9 @@
 import matplotlib.pyplot as plt
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
-from Regression import Regression
-from Regression_Data import Regression_Data
 import pandas as pd
 import tensorflow as tf
-from sklearn.preprocessing import MinMaxScaler
-from keras.preprocessing.sequence import TimeseriesGenerator
-import pickle
-
-
-def main():
-    # import test data
-    data = pd.read_csv("Data/energydata_complete.csv", sep=",", parse_dates=["date"])
-
-    # data preprocessing
-    data.dropna()
-    data['year'] = data['date'].dt.year
-    data['month'] = data['date'].dt.month
-    data['day'] = data['date'].dt.day
-    data['hour'] = data['date'].dt.hour
-    data['minute'] = data['date'].dt.minute
-    data = data.drop(columns=["date"])
-
-
-    # Create Data Class, start index and n_values atm only used for plotting, training and prediction done on all data
-    data_obj = Regression_Data(data=data, y_label="lights",scale=True)
-    print(data_obj)
-
-    filename = 'model.h5'
-    #data_obj.model = tf.keras.models.load_model(filename)
-
-    # Create classifier class
-    regressor = NN_Regression(data_obj)
-    data_obj.model.save(filename)
-    plt.show()
-    print(data_obj.result_string)
+from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
+from AI_Regression.Regression import Regression
+from AI_Regression.Regression_Data import Regression_Data
 
 
 class NN_Regression(Regression):
@@ -61,13 +29,12 @@ class NN_Regression(Regression):
             self.model = data_obj.model
             print("Model loaded")
         else:
-            self.model = self.train_model()
+            self.model = self.train_model(data_obj)
             data_obj.model = self.model
             print("Model created")
 
         # make predictions
         self.predictions = pd.DataFrame(self.model.predict(self.x_test))
-
 
         # get evaluation
         self.evaluate(data_obj)
@@ -75,12 +42,10 @@ class NN_Regression(Regression):
         # Print results
         self.print_results(data_obj)
 
-
-    def train_model(self):
+    def train_model(self, data_obj):
         model = tf.keras.Sequential()
-        model.add(tf.keras.layers.Dense(1024, activation="relu"))
-        model.add(tf.keras.layers.Dense(1024, activation="relu"))
-
+        for layer in data_obj.hidden_layers:
+            model.add(tf.keras.layers.Dense(layer, activation=data_obj.activation_func))
         model.add(tf.keras.layers.Dropout(0.2))
         model.add(tf.keras.layers.Dense(1))
         model.compile(loss=tf.keras.losses.MeanSquaredError(), optimizer="adam", metrics=['mse'])
@@ -100,11 +65,15 @@ class NN_Regression(Regression):
         return "This method implements the neural network regression."
 
     def print_results(self, data_obj):
-        data_obj.result_string = f"The classifiers R2_Score is {data_obj.r2_score}.\n\n" \
+        data_obj.result_string += f"The classifiers R2_Score is {data_obj.r2_score}.\n\n" \
                                  f"The mean abs. error is {data_obj.mean_abs_error}.\n\n" \
                                  f"The mean squared error is {data_obj.mean_sqr_error}."
 
     def plot(self, data_obj):
+        # plot predictions
+        super().plot_predictions(y_scaler=self.y_scaler, y_test=self.y_test, predictions=self.predictions,
+                                 data_obj=data_obj)
+
         #try:
         #    fig = plt.figure()
         #    plt.plot(self.history.history["mse"])
@@ -123,14 +92,23 @@ class NN_Regression(Regression):
         #except KeyError:
             # Loaded model has no history
         #    data_obj.accuracy_per_epoch = None
-        fig, ax = plt.subplots()
-        plt.plot(self.y_test.to_numpy()[0:data_obj.n_values], color='red', label='Real data')
-        plt.plot(self.predictions[0][0:data_obj.n_values], color='blue', label='Predicted data')
-        plt.title('Prediction')
-        plt.legend()
-        data_obj.prediction = fig
 
 
+def main():
+    # import test data
+    data = pd.read_csv("../Data/energydata_complete.csv")
+
+    # Create Data Class, start index and n_values atm only used for plotting, training and prediction done on all data
+    data_obj = Regression_Data(data=data, y_label="lights", scale=True, hidden_layers=[32, 64, 32])
+
+    filename = '../model.h5'
+    #data_obj.model = tf.keras.models.load_model(filename)
+
+    # Create classifier class
+    regressor = NN_Regression(data_obj)
+    data_obj.model.save(filename)
+    plt.show()
+    print(data_obj.result_string)
 
 
 

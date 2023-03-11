@@ -1,10 +1,10 @@
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
 import seaborn as sn
-from Classification_Data import Classification_Data
+from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+from AI_Classification.Classification_Data import Classification_Data
 
 
 class Classification:
@@ -13,6 +13,7 @@ class Classification:
     """
     def __init__(self, data_obj: Classification_Data):
         """
+        Initialize the class, preprocessing of data, split into x and y, train and test, encode variables if needed
         :param data_obj: Classification_Data object
         """
         # initialize necessary variables
@@ -43,6 +44,7 @@ class Classification:
     def split_evidence_labels(self, data_obj):
         """
         Splits given dataset into evidence and labels
+        :param data_obj: Classification_Data object
         """
         if data_obj.x_labels is None:
             if data_obj.y_label is None:
@@ -56,16 +58,13 @@ class Classification:
             data_obj.y_label = self.data.columns[-1]
         else:
             self.labels = self.data[data_obj.y_label].subtract(self.data[data_obj.y_label].min())
-        print(self.evidence)
-        print(self.labels)
-
 
     def __str__(self):
         """
         Returns a string with infos about the used methods and the achieved results
-        :return:
+        :return: string
         """
-        return f"This is a Classification Superclass"
+        return f"This is a Classification Superclass used for data preprocessing and evaluating and plotting results"
 
     @staticmethod
     def plot_confusion_matrix(y_test, predictions):

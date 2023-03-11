@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
 
 
 @dataclass
@@ -15,7 +15,7 @@ class Classification_Data:
     # Label of column used as Output/Classification Categories, if None last column will be used
     y_label: str = None
     # number and nodes for hidden layers as array. Ex: 3 layers with 64 nodes each: [64, 64, 64], more nodes and
-    # layers lead to longer training times
+    # layers lead to longer training times and more accurate results
     hidden_layers: list[int] = (64, 64)
     # number of training epochs, higher number leads to longer training time
     training_epochs: int = 10

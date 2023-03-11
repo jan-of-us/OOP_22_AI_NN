@@ -1,39 +1,10 @@
 import matplotlib.pyplot as plt
+import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
-from Regression import Regression
-from Regression_Data import Regression_Data
-from sklearn.preprocessing import MinMaxScaler
-import pandas as pd
+from AI_Regression.Regression import Regression
+from AI_Regression.Regression_Data import Regression_Data
 import pickle
-
-
-def main():
-    # import test data
-    data = pd.read_csv("Data/energydata_complete.csv", sep=",", parse_dates=["date"])
-
-    # data preprocessing
-    data.dropna()
-    data['year'] = data['date'].dt.year
-    data['month'] = data['date'].dt.month
-    data['day'] = data['date'].dt.day
-    data['hour'] = data['date'].dt.hour
-    data['minute'] = data['date'].dt.minute
-    data = data.drop(columns=["date"])
-
-
-    # Create Data Class, start index and n_values atm only used for plotting, training and prediction done on all data
-    data_obj = Regression_Data(data=data, y_label="lights", n_values=50, test_size=0.2, trees=100, scale=False)
-    print(data_obj)
-
-    filename = 'model.sav'
-    # data_obj.model = pickle.load(open(filename, 'rb'))
-
-    # Create classifier class
-    regressor = RF_Regression(data_obj)
-    # pickle.dump(data_obj.model, open(filename, 'wb'))
-    plt.show()
-    print(data_obj.result_string)
 
 
 class RF_Regression(Regression):
@@ -86,23 +57,36 @@ class RF_Regression(Regression):
         return "This method implements the random forest regression."
 
     def print_results(self, data_obj):
-        data_obj.result_string = f"The regressors R2_Score is {data_obj.r2_score}.\n\n" \
+        data_obj.result_string += f"The regressors R2_Score is {data_obj.r2_score}.\n\n" \
                                  f"The mean abs. error is {data_obj.mean_abs_error}.\n\n" \
                                  f"The mean squared error is {data_obj.mean_sqr_error}."
 
     def plot(self, data_obj):
-        fig, ax = plt.subplots()
-        plt.plot(self.y_test.to_numpy()[0:data_obj.n_values], color='red', label='Real data')
-        plt.plot(self.predictions[0:data_obj.n_values], color='blue', label='Predicted data')
-        plt.title('Prediction')
-        plt.legend()
-        data_obj.prediction = fig
+        # plot predictions
+        super().plot_predictions(y_scaler=self.y_scaler, y_test=self.y_test, predictions=self.predictions, data_obj=data_obj)
 
         # feature importance pie chart
         fig, ax = plt.subplots()
         ax.pie(data_obj.feature_importance_dict.values(), labels=data_obj.feature_importance_dict.keys())
         ax.axis('equal')
         data_obj.feature_importance = fig
+
+
+def main():
+    # import test data
+    data = pd.read_csv("../Data/energydata_complete.csv")
+
+    # Create Data Class, start index and n_values atm only used for plotting, training and prediction done on all data
+    data_obj = Regression_Data(data=data, x_labels=["T1"], y_label="Appliances", n_values=50, test_size=0.2, trees=100, scale=False)
+
+    filename = '../model.sav'
+    # data_obj.model = pickle.load(open(filename, 'rb'))
+
+    # Create classifier class
+    regressor = RF_Regression(data_obj)
+    # pickle.dump(data_obj.model, open(filename, 'wb'))
+    plt.show()
+    print(data_obj.result_string)
 
 
 

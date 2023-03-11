@@ -1,21 +1,23 @@
-import tensorflow as tf
-from Classification import Classification
 import matplotlib.pyplot as plt
-from Classification_Data import Classification_Data
 import pandas as pd
+import tensorflow as tf
 from sklearn.metrics import accuracy_score
-from zipfile import ZipFile
-import shutil
-
+from AI_Classification.Classification import Classification
+from AI_Classification.Classification_Data import Classification_Data
 
 
 class NN_Classification(Classification):
     def __init__(self, data_obj: Classification_Data):
+        """
+        Neural network classification.
+        :param data_obj: Classification_Data object
+        """
+        # initialize superclass for data preprocessing
         super().__init__(data_obj)
 
         # get the number of output categories from the dataset
         self.output_categories = data_obj.data[data_obj.y_label].nunique()
-
+        # check if imported model exists and has correct type
         if data_obj.model is not None and isinstance(data_obj.model, tf.keras.models.Sequential):
             self.model = data_obj.model
             print("Model loaded")
@@ -30,22 +32,26 @@ class NN_Classification(Classification):
             data_obj.model = self.model
             print("Model created")
 
-
+        # error handling for loaded model mismatch with selected data
         try:
             # predictions for confusion matrix
             self.predictions = self.model.predict(self.x_test)
             data_obj.accuracy_score = accuracy_score(self.y_test, tf.argmax(self.predictions, 1))
 
             # testing the network on the testing data
-            self.model.evaluate(self.x_test, self.y_test, verbose=2)
-            data_obj.result_string = f"The neural network classifier has a {accuracy_score(self.y_train, tf.argmax(self.model.predict(self.x_train), 1)):.2%} accuracy on the training data.\n"
-            data_obj.result_string += f"The neural network classifier has a {data_obj.accuracy_score:.2%} accuracy on the testing data.\n"
+            data_obj.result_string = f"The neural network classifier has a {accuracy_score(self.y_train, tf.argmax(self.model.predict(self.x_train), 1)):.2%} accuracy on the training data.\n\n"
+            data_obj.result_string += f"The neural network classifier has a {data_obj.accuracy_score:.2%} accuracy on the testing data.\n\n"
             data_obj.result_string += super().evaluate(self.y_test, tf.argmax(self.predictions, 1))
             self.plot(data_obj)
         except ValueError:
             data_obj.result_string = "The loaded model does not match the set parameters, please try again!"
 
     def get_model(self, data_obj):
+        """
+        Initialize the neural network
+        :param data_obj: Classification_Data object
+        :return: tf.keras.Sequential model (via self.model)
+        """
         self.model = tf.keras.models.Sequential([tf.keras.Input(shape=(self.evidence.shape[1]))])
         for layer in data_obj.hidden_layers:
             self.model.add(tf.keras.layers.Dense(layer, activation=data_obj.activation_func))
@@ -55,9 +61,9 @@ class NN_Classification(Classification):
 
     def plot(self, data_obj):
         """
-        Plot the results/history from the classification
-        :param param: Which plots to display: 0=all, 1=accuracy, 2=loss, 3=confusion-matrix
-        :return:
+        Creates the plots
+        :param data_obj: Classification_Data object
+        :return: data_object with modified variables
         """
 
         try:
@@ -88,7 +94,7 @@ class NN_Classification(Classification):
 def main(file):
     data = pd.read_csv(file, delimiter=";")
     data_obj = Classification_Data(data=data)
-    file = 'keras_model.h5'
+    file = '../keras_model.h5'
 
     #data_obj.model = tf.keras.models.load_model(file)
     classifier = NN_Classification(data_obj)
@@ -96,10 +102,9 @@ def main(file):
     # saving model to zip folder
     #data_obj.model.save(file)
 
-    print(data_obj.model.summary())
     plt.show()
     print(data_obj.result_string)
 
 
 if __name__ == "__main__":
-    main("Data/divorce.csv")
+    main("../Data/divorce.csv")
