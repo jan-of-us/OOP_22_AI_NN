@@ -20,8 +20,6 @@ class RF_Regression(Regression):
         self.sensitivity, self.specificity, self.predictions = int(), int(), None
         self.run_classifier(data_obj)
 
-        self.plot(data_obj)
-
     def run_classifier(self, data_obj):
         # train the model
         if data_obj.model is not None and isinstance(data_obj.model, RandomForestRegressor):
@@ -32,15 +30,17 @@ class RF_Regression(Regression):
             data_obj.model = self.model
             print("Model created")
 
-        # make predictions
-        self.predictions = self.model.predict(self.x_test)
-        # get evaluation
-        self.evaluate(data_obj)
+        try:
+            # make predictions
+            self.predictions = self.model.predict(self.x_test)
+            # get evaluation
+            self.evaluate(data_obj)
+            self.plot(data_obj)
+            # Print results
+            self.print_results(data_obj)
 
-
-        # Print results
-        self.print_results(data_obj)
-
+        except ValueError:
+            data_obj.result_string = "The loaded model does not match the set parameters, please try again!"
 
     def train_model(self):
         forest = RandomForestRegressor(n_estimators=self.k)
@@ -74,12 +74,12 @@ class RF_Regression(Regression):
 
 def main():
     # import test data
-    data = pd.read_csv("../Data/energydata_complete.csv")
+    data = pd.read_csv("./Data/energydata_complete.csv")
 
     # Create Data Class, start index and n_values atm only used for plotting, training and prediction done on all data
-    data_obj = Regression_Data(data=data, x_labels=["T1"], y_label="Appliances", n_values=50, test_size=0.2, trees=100, scale=False)
+    data_obj = Regression_Data(data=data, y_label="Appliances", n_values=50, test_size=0.2, trees=100, scale=False)
 
-    filename = '../model.sav'
+    filename = './model.sav'
     # data_obj.model = pickle.load(open(filename, 'rb'))
 
     # Create classifier class

@@ -21,8 +21,6 @@ class NN_Regression(Regression):
         self.sensitivity, self.specificity, self.predictions = int(), int(), None
         self.run_classifier(data_obj)
 
-        self.plot(data_obj)
-
     def run_classifier(self, data_obj):
         # train the model
         if data_obj.model is not None and isinstance(data_obj.model, tf.keras.models.Sequential):
@@ -33,15 +31,19 @@ class NN_Regression(Regression):
             data_obj.model = self.model
             print("Model created")
 
-        # make predictions
-        self.predictions = pd.DataFrame(self.model.predict(self.x_test))
+        try:
+            # make predictions
+            self.predictions = pd.DataFrame(self.model.predict(self.x_test))
 
-        # get evaluation
-        self.evaluate(data_obj)
+            # get evaluation
+            self.evaluate(data_obj)
 
-        # Print results
-        self.print_results(data_obj)
-
+            # Print results
+            self.print_results(data_obj)
+            # Create plots
+            self.plot(data_obj)
+        except ValueError:
+            data_obj.result_string = "The loaded model does not match the set parameters, please try again!"
     def train_model(self, data_obj):
         model = tf.keras.Sequential()
         for layer in data_obj.hidden_layers:
@@ -74,39 +76,39 @@ class NN_Regression(Regression):
         super().plot_predictions(y_scaler=self.y_scaler, y_test=self.y_test, predictions=self.predictions,
                                  data_obj=data_obj)
 
-        #try:
-        #    fig = plt.figure()
-        #    plt.plot(self.history.history["mse"])
-        #    plt.plot(self.history.history["val_mse"])
-        #    plt.plot(self.history.history["loss"])
-        #    plt.plot(self.history.history["val_loss"])
-         #   plt.legend(["training accuracy", "testing accuracy", "train-loss", "test-loss"], loc="best")
-        #    plt.xlabel("epoch")
-         #   plt.ylabel("accuracy/loss")
-         #   plt.title("model accuracy & loss")
-        #    plt.grid()
-         #   data_obj.accuracy_per_epoch = fig
-        #except AttributeError:
+        try:
+            fig = plt.figure()
+            plt.plot(self.history.history["mse"])
+            plt.plot(self.history.history["val_mse"])
+            plt.plot(self.history.history["loss"])
+            plt.plot(self.history.history["val_loss"])
+            plt.legend(["training accuracy", "testing accuracy", "train-loss", "test-loss"], loc="best")
+            plt.xlabel("epoch")
+            plt.ylabel("accuracy/loss")
+            plt.title("model accuracy & loss")
+            plt.grid()
+            data_obj.loss_per_epoch = fig
+        except AttributeError:
             # Loaded model has no history
-           # data_obj.accuracy_per_epoch = None
-        #except KeyError:
+            data_obj.loss_per_epoch = None
+        except KeyError:
             # Loaded model has no history
-        #    data_obj.accuracy_per_epoch = None
+            data_obj.loss_per_epoch = None
 
 
 def main():
     # import test data
-    data = pd.read_csv("../Data/energydata_complete.csv")
+    data = pd.read_csv("./Data/energydata_complete.csv")
 
     # Create Data Class, start index and n_values atm only used for plotting, training and prediction done on all data
-    data_obj = Regression_Data(data=data, y_label="lights", scale=True, hidden_layers=[32, 64, 32])
+    data_obj = Regression_Data(data=data, x_labels=["T1"], y_label="lights", scale=True, hidden_layers=[32, 64, 32], training_epochs=50)
 
-    filename = '../model.h5'
-    #data_obj.model = tf.keras.models.load_model(filename)
+    filename = 'model.h5'
+    data_obj.model = tf.keras.models.load_model(filename)
 
     # Create classifier class
     regressor = NN_Regression(data_obj)
-    data_obj.model.save(filename)
+    #data_obj.model.save(filename)
     plt.show()
     print(data_obj.result_string)
 
