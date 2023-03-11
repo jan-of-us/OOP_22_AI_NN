@@ -49,7 +49,7 @@ class NN_Regression(Regression):
         model.add(tf.keras.layers.Dropout(0.2))
         model.add(tf.keras.layers.Dense(1))
         model.compile(loss=tf.keras.losses.MeanSquaredError(), optimizer="adam", metrics=['mse'])
-        self.history = model.fit(x=self.x_train, y=self.y_train, epochs=100, validation_split=0.2)
+        self.history = model.fit(x=self.x_train, y=self.y_train, epochs=data_obj.training_epochs, validation_split=0.2)
         model.evaluate(x=self.x_test, y=self.y_test)
         #model.save("model.h5")
         return model
