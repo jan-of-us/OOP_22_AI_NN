@@ -55,6 +55,7 @@ class Regression:
                 objects[column] = pd.to_datetime(objects[column])
                 converted_columns.append(column)
                 print(f"Column converted: {column}")
+            # pandas parsererror can't specifically be caught
             except Exception:
                 dropped_columns.append(column)
                 print(f"Not converted: {column}")
@@ -65,7 +66,8 @@ class Regression:
                 if val not in data_obj.x_labels:
                     dropped_columns.remove(val)
         if dropped_columns:
-            data_obj.result_string += f"The following columns couldn't be used due to being non-numeric and were dropped: {str(dropped_columns).strip('[]')}\n\n"
+            data_obj.result_string += f"The following columns couldn't be used due to being non-numeric and were " \
+                                      f"dropped: {str(dropped_columns).strip('[]')}\n\n"
         date_objects = pd.DataFrame()
         for column in objects.columns:
             date_objects['year'] = objects[column].dt.year
@@ -84,9 +86,13 @@ class Regression:
                 if val not in data_obj.x_labels:
                     converted_columns.remove(val)
                 else:
-                    data_obj.x_labels.append(date_objects.columns)
+                    for name in date_objects.columns:
+                        data_obj.x_labels.append(name)
         if converted_columns:
             data_obj.result_string += f"The following column was converted: {str(converted_columns).strip('[]')}\n\n"
+            for value in converted_columns:
+                if data_obj.x_labels is not None:
+                    data_obj.x_labels.remove(value)
 
     def split_data(self, data_obj):
         """
@@ -113,7 +119,18 @@ class Regression:
         return f"This is a Regression Superclass"
 
     @staticmethod
-    def plot_predictions(y_scaler, y_test, predictions, data_obj):
+    def print_results(data_obj):
+        """
+        Adds the results to the result_string for the GUI
+        :param data_obj: Regression_Data object
+        :return: modified data_obj
+        """
+        data_obj.result_string += f"The regressors R2_Score is {data_obj.r2_score:.2f}.\n\n" \
+                                 f"The mean abs. error is {data_obj.mean_abs_error:.3f}.\n\n" \
+                                 f"The mean squared error is {data_obj.mean_sqr_error:.3f}."
+
+    @staticmethod
+    def plot_predictions(y_scaler, y_test, predictions, data_obj, train_test):
         """
         Plots the predicted and real values against each other. Plots as many values as the user selected
         :return: modified data_obj
@@ -128,6 +145,25 @@ class Regression:
         fig, ax = plt.subplots()
         plt.plot(y_test.to_numpy()[0:data_obj.n_values], color='red', label='Real data')
         plt.plot(predictions[0:data_obj.n_values], color='blue', label='Predicted data')
-        plt.title('Prediction')
         plt.legend()
-        data_obj.prediction = fig
+        plt.grid()
+        if train_test == "test":
+            plt.title('Prediction on testing set')
+            data_obj.prediction = fig
+        else:
+            plt.title('Prediction on training set')
+            data_obj.prediction_train = fig
+
+        fig, ax = plt.subplots()
+        plt.plot(y_test.to_numpy(), predictions, 'ro', label="Predicted Values")
+        plt.legend()
+        plt.grid()
+        plt.axis('square')
+        plt.axline([0, 0], [1, 1], label="Optimal", color="black")
+        plt.legend()
+        if train_test == "test":
+            plt.title('y_test vs predictions')
+            data_obj.prediction_y_test = fig
+        else:
+            plt.title('y_train vs predictions')
+            data_obj.prediction_y_train = fig

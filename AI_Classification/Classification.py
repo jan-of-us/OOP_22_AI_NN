@@ -40,7 +40,6 @@ class Classification:
             self.data[value] = label_encoder.fit_transform(self.data[value])
         return self.data
 
-
     def split_evidence_labels(self, data_obj):
         """
         Splits given dataset into evidence and labels
@@ -67,48 +66,18 @@ class Classification:
         return f"This is a Classification Superclass used for data preprocessing and evaluating and plotting results"
 
     @staticmethod
-    def plot_confusion_matrix(y_test, predictions):
+    def plot_confusion_matrix(y_test, predictions, title):
         """
         Generates a confusion matrix with given labels and predictions
         :param y_test: real labels
         :param predictions: predicted labels
+        :param title: Title for the plot
         :return: matplotlib subplot
         """
         conf_matrix = confusion_matrix(y_test, predictions)
         conf_matrix = pd.DataFrame(conf_matrix)
         fig, ax = plt.subplots()
         ax = sn.heatmap(conf_matrix, annot=True)
+        plt.title(title)
         return fig
 
-    @staticmethod
-    def evaluate(y_test, predictions):
-        """
-        Evaluate Predictions
-        :param y_test: real labels
-        :param predictions: predicted labels
-        :return: String with Results
-        """
-        pos_label = 0
-        neg_label = 0
-        corr_pos_pred = 0
-        corr_neg_pred = 0
-        true_labels = y_test.to_numpy()
-        for i in range(true_labels.shape[0]):
-            # specificity
-            if true_labels[i] == 0:
-                neg_label += 1
-                if predictions[i] == 0:
-                    corr_neg_pred += 1
-            # sensitivity
-            if true_labels[i] == 1:
-                pos_label += 1
-                if predictions[i] == 1:
-                    corr_pos_pred += 1
-        # sensitivity = corr_pos_pred / float(pos_label)
-        # specificity = corr_neg_pred / float(neg_label)
-        results = f"Detailed results on testing set:\n\n"\
-                  f"Correct: {(y_test == predictions).sum()}\n\n" \
-                  f"Incorrect: {(y_test != predictions).sum()}\n\n" \
-                #   f"True Positive Rate: {100 * sensitivity:.2f}%\n" \
-                #   f"True Negative Rate: {100 * specificity:.2f}%"
-        return results

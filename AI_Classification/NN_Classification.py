@@ -28,7 +28,8 @@ class NN_Classification(Classification):
             if data_obj.validation_split is False:
                 self.history = self.model.fit(self.x_train, self.y_train, epochs=data_obj.training_epochs)
             else:
-                self.history = self.model.fit(self.x_train, self.y_train, validation_split=0.2, epochs=data_obj.training_epochs)
+                self.history = self.model.fit(self.x_train, self.y_train, validation_split=0.2,
+                                              epochs=data_obj.training_epochs)
             data_obj.model = self.model
             print("Model created")
 
@@ -38,10 +39,12 @@ class NN_Classification(Classification):
             self.predictions = self.model.predict(self.x_test)
             data_obj.accuracy_score = accuracy_score(self.y_test, tf.argmax(self.predictions, 1))
 
-            # testing the network on the testing data
-            data_obj.result_string = f"The neural network classifier has a {accuracy_score(self.y_train, tf.argmax(self.model.predict(self.x_train), 1)):.2%} accuracy on the training data.\n\n"
-            data_obj.result_string += f"The neural network classifier has a {data_obj.accuracy_score:.2%} accuracy on the testing data.\n\n"
-            data_obj.result_string += super().evaluate(self.y_test, tf.argmax(self.predictions, 1))
+            # creating the text output (accuracies training and testing)
+            data_obj.result_string = f"The neural network classifier has a " \
+                                     f"{accuracy_score(self.y_train, tf.argmax(self.model.predict(self.x_train), 1)):.2%} " \
+                                     f"accuracy on the training data.\n\n"
+            data_obj.result_string += f"The neural network classifier has a " \
+                                      f"{data_obj.accuracy_score:.2%} accuracy on the testing data.\n\n"
             self.plot(data_obj)
         except ValueError:
             data_obj.result_string = "The loaded model does not match the set parameters, please try again!"
@@ -87,14 +90,16 @@ class NN_Classification(Classification):
 
         # convert predictions from percentages to labels
         conf_predictions = tf.argmax(self.predictions, 1)
-        data_obj.confusion_matrix = Classification.plot_confusion_matrix(self.y_test, conf_predictions)
-
+        data_obj.confusion_matrix_test = Classification.plot_confusion_matrix(self.y_test, conf_predictions,
+                                                                              "Confusion Matrix for Testing Data")
+        data_obj.confusion_matrix_train = Classification.plot_confusion_matrix(self.y_train, tf.argmax(
+            self.model.predict(self.x_train), 1), "Confusion Matrix for Training Data")
 
 
 def main(file):
     data = pd.read_csv(file, delimiter=";")
     data_obj = Classification_Data(data=data)
-    file = '../keras_model.h5'
+    file = './keras_model.h5'
 
     #data_obj.model = tf.keras.models.load_model(file)
     classifier = NN_Classification(data_obj)
@@ -107,4 +112,4 @@ def main(file):
 
 
 if __name__ == "__main__":
-    main("../Data/divorce.csv")
+    main("./Data/divorce.csv")

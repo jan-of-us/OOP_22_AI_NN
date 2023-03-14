@@ -32,7 +32,8 @@ class Classification_Data:
 
     # OUTPUTS
     # Plots
-    confusion_matrix: plt.Figure = plt.figure(figsize=(10, 6))
+    confusion_matrix_train: plt.Figure = plt.figure(figsize=(10, 6))
+    confusion_matrix_test: plt.Figure = plt.figure(figsize=(10, 6))
     accuracy_per_epoch: plt.Figure = plt.figure(figsize=(10, 6))
     feature_importance: plt.Figure = plt.figure(figsize=(10, 6))
 

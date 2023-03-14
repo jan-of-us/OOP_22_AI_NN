@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
-from Classification import Classification
-from Classification_Data import Classification_Data
+from AI_Classification.Classification import Classification
+from AI_Classification.Classification_Data import Classification_Data
 import pickle
 
 
@@ -44,8 +44,16 @@ class RF_Classification(Classification):
             data_obj.accuracy_score = accuracy_score(self.y_test, self.predictions)
             data_obj.result_string = f"The random forest classifier has a {accuracy_score(self.y_train, self.model.predict(self.x_train)):.2%} accuracy on the training data.\n\n"
             data_obj.result_string += f"The random forest classifier has a {data_obj.accuracy_score:.2%} accuracy on the testing data.\n\n"
-            data_obj.result_string += super().evaluate(self.y_test, self.predictions)
             data_obj.feature_importance_dict = dict(zip(self.x_test.columns, self.model.feature_importances_))
+            self.feature_importance_for_chart = {}
+            rest = 0.0
+            for value in data_obj.feature_importance_dict.keys():
+                if data_obj.feature_importance_dict[value] < 0.025:
+                    rest += data_obj.feature_importance_dict[value]
+                else:
+                    self.feature_importance_for_chart[value] = data_obj.feature_importance_dict[value]
+            if rest != 0.0:
+                self.feature_importance_for_chart["Rest (features with\nindividually < 2,5%"] = rest
             self.plot(data_obj)
         except ValueError:
             data_obj.result_string = "The loaded model does not match the set parameters, please try again!"
@@ -71,20 +79,22 @@ class RF_Classification(Classification):
         :return: data_object with modified variables
         """
         # confusion matrix
-        data_obj.confusion_matrix = super().plot_confusion_matrix(y_test=self.y_test, predictions=self.predictions)
+        data_obj.confusion_matrix_test = Classification.plot_confusion_matrix(y_test=self.y_test, predictions=self.predictions, title="Confusion Matrix for Testing Data")
+        data_obj.confusion_matrix_train = Classification.plot_confusion_matrix(self.y_train, self.model.predict(self.x_train), "Confusion Matrix for Training Data")
         # feature importance pie chart
         fig, ax = plt.subplots()
-        ax.pie(data_obj.feature_importance_dict.values(), labels=data_obj.feature_importance_dict.keys())
+        ax.pie(self.feature_importance_for_chart.values(), labels=self.feature_importance_for_chart.keys(), autopct='%1.1f%%', pctdistance=0.8)
         ax.axis('equal')
+        plt.title("Feature importances")
         data_obj.feature_importance = fig
 
 
 def main():
     # import test data
-    data = pd.read_csv("../Data/divorce.csv", delimiter=";")
+    data = pd.read_csv("./Data/divorce.csv", delimiter=";")
     data_obj = Classification_Data(data=data, trees=100)
     # Create classifier class
-    filename = '../model.sav'
+    filename = './model.sav'
     #data_obj.model = pickle.load(open(filename, 'rb'))
 
     classifier = RF_Classification(data_obj)

@@ -16,12 +16,6 @@ class Regression_Data:
     y_label: str = None
     # number of values to use from the testing set for plotting
     n_values: int = 50
-    # Learning rate of the optimizer
-    alpha: float = 0.01
-    # Number of previous time steps to use as input for predicting the next time step
-    window_length: int = 720
-    # Number of samples per gradient update
-    batch_size: int = 32
     # number and nodes for hidden layers as array 3 layers with 64 nodes each: [64, 64, 64]
     hidden_layers: list[int] = (64, 64)
     # number of training epochs
@@ -38,6 +32,9 @@ class Regression_Data:
     # OUTPUTS
     # Plots
     prediction: plt.Figure = plt.figure(figsize=(10, 6))
+    prediction_y_test: plt.figure = plt.figure(figsize=(10, 6))
+    prediction_train: plt.Figure = plt.figure(figsize=(10, 6))
+    prediction_y_train: plt.figure = plt.figure(figsize=(10, 6))
     loss_per_epoch: plt.Figure = plt.figure(figsize=(10, 6))
     feature_importance: plt.Figure = plt.figure(figsize=(10, 6))
 
