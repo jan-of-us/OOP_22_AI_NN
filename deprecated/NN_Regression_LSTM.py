@@ -1,12 +1,10 @@
 import matplotlib.pyplot as plt
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
-from Regression import Regression
-from Regression_Data import Regression_Data
+from sklearn.metrics import r2_score
+from AI_Regression.Regression import Regression
+from AI_Regression.Regression_Data import Regression_Data
 import pandas as pd
 import tensorflow as tf
 from keras.preprocessing.sequence import TimeseriesGenerator
-import pickle
 
 
 def main():
