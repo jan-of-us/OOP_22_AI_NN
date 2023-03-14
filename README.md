@@ -4,11 +4,30 @@
 Created as part of [Data Science and Visualization Application](https://github.com/YuganshuWadhwa/Data-Science-and-Visualization-Application).
 
 For example usage see [Implementation Examples](Implementation_Examples.ipynb)
-## Implementation into the GUI
-### User Inputs:
-Classification_Data and Regression_Data implement all user inputs and handle outputs from the classes.
-### Classification Data Parameters:
+
+## Features
+* Classification and Regression using RandomForest or Neural Networks
+* Plotting options:
+  * Classification:
+    * Confusion matrices
+    * feature importance (random forest only)
+    * training history (neural net only)
+  * Regression
+    * Model fit (y_train vs prediction on x_train)
+    * Prediction
+    * feature importance (random forest only)
+    * training history (neural net only)
+
+### To install the needed modules:
+```
+pip install -r requirements.txt
+```
+
+
 <details>
+
+### Classification Data Parameters:
+
 
 | Parameter Name   | Type             | Range / Values                                                                                              | Default Value  | Used for       | Description                                                                                                                                 |
 |------------------|------------------|-------------------------------------------------------------------------------------------------------------|----------------|----------------|---------------------------------------------------------------------------------------------------------------------------------------------|
@@ -23,11 +42,11 @@ Classification_Data and Regression_Data implement all user inputs and handle out
 | trees            | int              | 1 - 10.000                                                                                                  | 100            | Random Forest  | Number of trees in the forest                                                                                                               |
 | model            |                  |                                                                                                             | None           | General        | Allows user uploaded pre-trained models                                                                                                     |
 
-</details>
+
 
 ### Regression Data Parameters
 
-<details>
+
 
 | Input Name        | Type             | Range / Values                                                                                              | Default Value | Used for      | Description                                                                                                                                 |
 |-------------------|------------------|-------------------------------------------------------------------------------------------------------------|---------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------|
@@ -44,17 +63,4 @@ Classification_Data and Regression_Data implement all user inputs and handle out
 
 </details>
 
-### Outputs:
-#### General:
-  * result_string contains results in text based form
-  * feature_importance_dict: dictionary with the importance of each attribute
-  * accuracy_score
-#### Plots
-* confusion matrix
-* for NN: accuracy for each epoch training + testing, losses
-* feature importance pie chart
 
-### To install the needed modules:
-```
-pip install -r requirements.txt
-```
