@@ -18,7 +18,7 @@ class Classification:
         """
         # initialize necessary variables
         self.evidence, self.labels, self.model = pd.DataFrame, pd.DataFrame, None
-        self.data = data_obj.data
+        self.data = data_obj.data.dropna()
         data_obj.data = self.encode()
         self.test_size = data_obj.test_size
 

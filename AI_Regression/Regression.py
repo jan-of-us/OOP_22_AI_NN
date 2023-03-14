@@ -17,7 +17,7 @@ class Regression:
         """
         # initialize necessary variables
         self.features, self.target, self.model = pd.DataFrame, pd.DataFrame, None
-        self.data = data_obj.data
+        self.data = data_obj.data.dropna()
         self.process_data(data_obj)
         self.test_size = data_obj.test_size
 
