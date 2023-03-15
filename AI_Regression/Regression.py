@@ -47,7 +47,7 @@ class Regression:
         :param data_obj: Regression_Data object
         :return: modified self.data and data_obj.result_string to inform user of processing
         """
-        objects = self.data.select_dtypes(include="object")
+        objects = self.data.select_dtypes(include=["object", "datetime64"])
         dropped_columns = []
         converted_columns = []
         for column in objects.columns:
