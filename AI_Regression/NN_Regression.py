@@ -7,18 +7,30 @@ from AI_Regression.Regression_Data import Regression_Data
 
 
 class NN_Regression(Regression):
-    """
-    RandomForest-classification.
-    :param data_obj: Regression_Data object
-    :return: data_obj with filled result variables
+    """RandomForest-classification.
+
+    Args:
+        data_obj: Regression_Data object
+
+    Returns:
+        data_obj with filled result variables
     """
     def __init__(self, data_obj: Regression_Data):
         super().__init__(data_obj)
         self.hidden_layers = data_obj.hidden_layers
-        self.sensitivity, self.specificity, self.predictions = int(), int(), None
-        self.run_classifier(data_obj)
+        self.predictions, self.train_predictions, self.history = None, None, None
+        self.run_regressor(data_obj)
 
-    def run_classifier(self, data_obj):
+    def run_regressor(self, data_obj):
+        """
+        Load or create a model, train model (if applicable), make predictions for trained model or uploaded model if
+        it matches the data. Evaluate and plot results
+        Args:
+            data_obj: Regression_Data object
+
+        Returns:
+            data_obj with modified values
+        """
         # train the model
         if data_obj.model is not None and isinstance(data_obj.model, tf.keras.models.Sequential):
             self.model = data_obj.model
@@ -46,6 +58,15 @@ class NN_Regression(Regression):
             data_obj.result_string = "The loaded model does not match the set parameters, please try again!"
 
     def train_model(self, data_obj):
+        """
+        Initialize the neural network
+
+        Args:
+            data_obj: Regression_Data object
+
+        Returns:
+            tf.keras.Sequential model (via self.model)
+        """
         model = tf.keras.Sequential()
         for layer in data_obj.hidden_layers:
             model.add(tf.keras.layers.Dense(layer, activation=data_obj.activation_func))
@@ -57,6 +78,14 @@ class NN_Regression(Regression):
         return model
 
     def evaluate(self, data_obj):
+        """
+        Create the evaluation, R2 Score, MAE and MSE
+        Args:
+            data_obj: Regression_Data object
+
+        Returns:
+            data_obj with modified values
+        """
         data_obj.r2_score = r2_score(self.y_test, self.predictions)
         data_obj.mean_abs_error = mean_absolute_error(self.y_test, self.predictions)
         data_obj.mean_sqr_error = mean_squared_error(self.y_test, self.predictions)
@@ -65,6 +94,14 @@ class NN_Regression(Regression):
         return "This Class implements regression using a artificial neural network."
 
     def plot(self, data_obj):
+        """
+        Creates the output plots
+        Args:
+            data_obj: Regression_Data object
+
+        Returns:
+            data_obj with modified values
+        """
         # plot predictions
         super().plot_predictions(y_scaler=self.y_scaler, y_test=self.y_test, predictions=self.predictions,
                                  data_obj=data_obj, train_test="test")
@@ -102,7 +139,6 @@ def main():
     #data_obj.model.save(filename)
     plt.show()
     print(data_obj.result_string)
-
 
 
 if __name__ == "__main__":

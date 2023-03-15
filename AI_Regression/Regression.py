@@ -7,13 +7,13 @@ import matplotlib.pyplot as plt
 
 
 class Regression:
-    """
-    Class for all regression methods
-    """
+    """Class for all regression methods"""
+
     def __init__(self, data_obj: Regression_Data):
         """
-        :param data: dataframe containing the dataset
-        :param test_size: share of data that is used for testing. Default: 0.2
+        Args:
+            data_obj: Regression_Data object
+
         """
         # initialize necessary variables
         self.features, self.target, self.model = pd.DataFrame, pd.DataFrame, None
@@ -35,7 +35,6 @@ class Regression:
             self.x_scaler = None
             self.y_scaler = None
 
-
         # split into training and testing data
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(
             self.features, self.target, test_size=self.test_size
@@ -44,8 +43,13 @@ class Regression:
     def process_data(self, data_obj):
         """
         Drop non-numeric columns from the dataframe, tries to find a column with date and converts it to usable format
-        :param data_obj: Regression_Data object
-        :return: modified self.data and data_obj.result_string to inform user of processing
+
+        Args:
+            data_obj: Regression_Data object
+
+        Returns:
+            modified self.data and data_obj.result_string to inform user
+            of processing
         """
         objects = self.data.select_dtypes(include=["object", "datetime64"])
         dropped_columns = []
@@ -95,8 +99,12 @@ class Regression:
                     data_obj.x_labels.remove(value)
 
     def split_data(self, data_obj):
-        """
-        Splits given dataset into evidence and labels, requires labels to be last column of dataframe
+        """Splits given dataset into evidence and labels, requires labels to be last column of dataframe
+
+        Args:
+            data_obj: Regression_Data object
+        Returns:
+            modified data_obj
         """
         if data_obj.x_labels is None:
             if data_obj.y_label is None:
@@ -112,28 +120,40 @@ class Regression:
             self.target = self.data[data_obj.y_label]
 
     def __str__(self):
-        """
-        Returns a string with infos about the used methods and the achieved results
-        :return:
+        """Returns a string with infos about the used methods and the achieved results
+
+        Returns:
+
         """
         return f"This is a Regression Superclass"
 
     @staticmethod
     def print_results(data_obj):
-        """
-        Adds the results to the result_string for the GUI
-        :param data_obj: Regression_Data object
-        :return: modified data_obj
+        """Adds the results to the result_string for the GUI
+
+        Args:
+            data_obj: Regression_Data object
+
+        Returns:
+            modified data_obj
         """
         data_obj.result_string += f"The regressors R2_Score is {data_obj.r2_score:.2f}.\n\n" \
-                                 f"The mean abs. error is {data_obj.mean_abs_error:.3f}.\n\n" \
-                                 f"The mean squared error is {data_obj.mean_sqr_error:.3f}."
+                                  f"The mean abs. error is {data_obj.mean_abs_error:.3f}.\n\n" \
+                                  f"The mean squared error is {data_obj.mean_sqr_error:.3f}."
 
     @staticmethod
     def plot_predictions(y_scaler, y_test, predictions, data_obj, train_test):
-        """
-        Plots the predicted and real values against each other. Plots as many values as the user selected
-        :return: modified data_obj
+        """Plots the predicted and real values against each other. Plots as many values as the user selected
+
+        Args:
+            y_scaler: MinMaxScaler used to scale y-data
+            y_test: Real values for y
+            predictions: Predicted values for y
+            data_obj: Regression_Data object
+            train_test: str "train" or "test" for plot title and correct output to data_obj
+
+        Returns:
+            modified data_obj
         """
         if data_obj.scale is True:
             # reverse transform

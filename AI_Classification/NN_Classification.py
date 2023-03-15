@@ -8,9 +8,10 @@ from AI_Classification.Classification_Data import Classification_Data
 
 class NN_Classification(Classification):
     def __init__(self, data_obj: Classification_Data):
-        """
-        Neural network classification.
-        :param data_obj: Classification_Data object
+        """Neural network classification.
+
+        Args:
+            data_obj: Classification_Data object
         """
         # initialize superclass for data preprocessing
         super().__init__(data_obj)
@@ -50,10 +51,13 @@ class NN_Classification(Classification):
             data_obj.result_string = "The loaded model does not match the set parameters, please try again!"
 
     def get_model(self, data_obj):
-        """
-        Initialize the neural network
-        :param data_obj: Classification_Data object
-        :return: tf.keras.Sequential model (via self.model)
+        """Initialize the neural network
+
+        Args:
+            data_obj: Classification_Data object
+
+        Returns:
+            tf.keras.Sequential model (via self.model)
         """
         self.model = tf.keras.models.Sequential([tf.keras.Input(shape=(self.evidence.shape[1]))])
         for layer in data_obj.hidden_layers:
@@ -63,10 +67,13 @@ class NN_Classification(Classification):
         self.model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
     def plot(self, data_obj):
-        """
-        Creates the plots
-        :param data_obj: Classification_Data object
-        :return: data_object with modified variables
+        """Creates the plots
+
+        Args:
+            data_obj: Classification_Data object
+
+        Returns:
+            data_object with modified variables
         """
 
         try:

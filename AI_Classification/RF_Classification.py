@@ -9,9 +9,10 @@ import pickle
 
 class RF_Classification(Classification):
     def __init__(self, data_obj: Classification_Data):
-        """
-        RandomForest-classification.
-        :param data_obj: Classification_Data object
+        """RandomForest-classification.
+
+        Args:
+            data_obj: Classification_Data object
         """
         # super class initialization for data preprocessing
         super().__init__(data_obj)
@@ -22,10 +23,13 @@ class RF_Classification(Classification):
         self.run_classifier(data_obj)
 
     def run_classifier(self, data_obj):
-        """
-        Initialize the model, train (if not loaded) and evaluate on test data
-        :param data_obj: Classification_Data object
-        :return: data_obj with modified variables
+        """Initialize the model, train (if not loaded) and evaluate on test data
+
+        Args:
+            data_obj: Classification_Data object
+
+        Returns:
+            data_obj with modified variables
         """
         # check if loaded model exists and matches type
         if data_obj.model is not None and isinstance(data_obj.model, RandomForestClassifier):
@@ -59,9 +63,10 @@ class RF_Classification(Classification):
             data_obj.result_string = "The loaded model does not match the set parameters, please try again!"
 
     def train_model(self):
-        """
-        Initializes and trains the random forest
-        :return: RandomForestClassifier
+        """Initializes and trains the random forest
+
+        Returns:
+            RandomForestClassifier
         """
         # initialize random forest
         forest = RandomForestClassifier(n_estimators=self.n)
@@ -73,17 +78,25 @@ class RF_Classification(Classification):
         return "This method implements the random forest classification."
 
     def plot(self, data_obj):
-        """
-        Creates the plots
-        :param data_obj: Classification_Data object
-        :return: data_object with modified variables
+        """Creates the plots
+
+        Args:
+            data_obj: Classification_Data object
+
+        Returns:
+            data_object with modified variables
         """
         # confusion matrix
-        data_obj.confusion_matrix_test = Classification.plot_confusion_matrix(y_test=self.y_test, predictions=self.predictions, title="Confusion Matrix for Testing Data")
-        data_obj.confusion_matrix_train = Classification.plot_confusion_matrix(self.y_train, self.model.predict(self.x_train), "Confusion Matrix for Training Data")
+        data_obj.confusion_matrix_test = Classification.plot_confusion_matrix(y_test=self.y_test,
+                                                                              predictions=self.predictions,
+                                                                              title="Confusion Matrix for Testing Data")
+        data_obj.confusion_matrix_train = Classification.plot_confusion_matrix(self.y_train,
+                                                                               self.model.predict(self.x_train),
+                                                                               "Confusion Matrix for Training Data")
         # feature importance pie chart
         fig, ax = plt.subplots()
-        ax.pie(self.feature_importance_for_chart.values(), labels=self.feature_importance_for_chart.keys(), autopct='%1.1f%%', pctdistance=0.8)
+        ax.pie(self.feature_importance_for_chart.values(), labels=self.feature_importance_for_chart.keys(),
+               autopct='%1.1f%%', pctdistance=0.8)
         ax.axis('equal')
         plt.title("Feature importances")
         data_obj.feature_importance = fig
@@ -102,6 +115,7 @@ def main():
 
     plt.show()
     print(data_obj.result_string)
+
 
 if __name__ == "__main__":
     main()

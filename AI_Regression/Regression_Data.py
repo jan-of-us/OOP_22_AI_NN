@@ -44,6 +44,3 @@ class Regression_Data:
     mean_abs_error: float = None
     mean_sqr_error: float = None
     feature_importance_dict: dict = None
-
-    def __str__(self):
-        return "This is a Dataclass for Regression."
