@@ -46,8 +46,11 @@ class RF_Classification(Classification):
             self.predictions = self.model.predict(self.x_test)
             # get evaluation
             data_obj.accuracy_score = accuracy_score(self.y_test, self.predictions)
-            data_obj.result_string = f"The random forest classifier has a {accuracy_score(self.y_train, self.model.predict(self.x_train)):.2%} accuracy on the training data.\n\n"
-            data_obj.result_string += f"The random forest classifier has a {data_obj.accuracy_score:.2%} accuracy on the testing data.\n\n"
+            data_obj.result_string = f"The random forest classifier has a " \
+                                     f"{accuracy_score(self.y_train, self.model.predict(self.x_train)):.2%} " \
+                                     f"accuracy on the training data.\n\n"
+            data_obj.result_string += f"The random forest classifier has a {data_obj.accuracy_score:.2%} " \
+                                      f"accuracy on the testing data.\n\n"
             data_obj.feature_importance_dict = dict(zip(self.x_test.columns, self.model.feature_importances_))
             self.feature_importance_for_chart = {}
             rest = 0.0
