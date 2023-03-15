@@ -9,7 +9,7 @@ import pickle
 
 class RF_Classification(Classification):
     def __init__(self, data_obj: Classification_Data):
-        """RandomForest-classification.
+        """RandomForest classification.
 
         Args:
             data_obj: Classification_Data object

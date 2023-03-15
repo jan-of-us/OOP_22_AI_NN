@@ -11,7 +11,7 @@ NN_Regression(
 
 
 ---
-RandomForest-classification.
+Neural Network Regression.
 
 
 **Args**

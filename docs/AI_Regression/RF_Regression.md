@@ -11,7 +11,7 @@ RF_Regression(
 
 
 ---
-RandomForest-classification.
+RandomForest Regression.
 
 
 **Args**

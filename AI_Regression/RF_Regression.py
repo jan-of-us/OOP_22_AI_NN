@@ -9,7 +9,7 @@ import pickle
 
 class RF_Regression(Regression):
     """
-    RandomForest-classification.
+    RandomForest Regression.
 
     Args:
         data_obj: Regression_Data object

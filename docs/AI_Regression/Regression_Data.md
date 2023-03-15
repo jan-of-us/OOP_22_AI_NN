@@ -9,6 +9,7 @@ Regression_Data()
 
 ## Parameters
 
+
 | Input Name        | Type             | Range / Values                                                                                              | Default Value | Used for      | Description                                                                                                                                 |
 |-------------------|------------------|-------------------------------------------------------------------------------------------------------------|---------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------|
 | Data              | Pandas Dataframe | -                                                                                                           | -             | General       | Contains the dataset                                                                                                                        |
@@ -21,5 +22,4 @@ Regression_Data()
 | activation_func   | string           | elu, relu, linear, sigmoid, hard_sigmoid, softmax, softplus, tanh, exponential, gelu, selu, softsign, swish | "relu"        | Neural Net    | https://www.tensorflow.org/api_docs/python/tf/keras/activations                                                                             |
 | trees             | int              | 1 - 10.000                                                                                                  | 100           | Random Forest | Number of trees in the forest                                                                                                               |
 | model             |                  |                                                                                                             | None          | General       | Allows user uploaded pre-trained models                                                                                                     |
-
 

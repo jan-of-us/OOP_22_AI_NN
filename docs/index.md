@@ -5,6 +5,8 @@ Created as part of [Data Science and Visualization Application](https://github.c
 
 For example usage see [Implementation Examples](Implementation_Examples.ipynb)
 
+Documentation can be found [here.](https://oop-22-ai-nn.readthedocs.io/en/latest/)
+
 ## Features
 * Classification and Regression using RandomForest or Neural Networks
 * Plotting options:
@@ -22,5 +24,3 @@ For example usage see [Implementation Examples](Implementation_Examples.ipynb)
 ```
 pip install -r requirements.txt
 ```
-
-

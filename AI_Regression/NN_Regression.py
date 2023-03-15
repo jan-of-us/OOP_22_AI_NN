@@ -7,7 +7,7 @@ from AI_Regression.Regression_Data import Regression_Data
 
 
 class NN_Regression(Regression):
-    """RandomForest-classification.
+    """Neural Network Regression.
 
     Args:
         data_obj: Regression_Data object

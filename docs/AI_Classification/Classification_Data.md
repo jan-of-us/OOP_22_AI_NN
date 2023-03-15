@@ -7,6 +7,8 @@
 Classification_Data()
 ```
 ## Parameters
+
+
 | Parameter Name   | Type             | Range / Values                                                                                              | Default Value  | Used for       | Description                                                                                                                                 |
 |------------------|------------------|-------------------------------------------------------------------------------------------------------------|----------------|----------------|---------------------------------------------------------------------------------------------------------------------------------------------|
 | Data             | Pandas Dataframe | -                                                                                                           | -              | General        | Contains the dataset                                                                                                                        |
@@ -19,5 +21,6 @@ Classification_Data()
 | validation_split | Bool             |                                                                                                             | True           | Neural Net     | Whether during the training a part of the data will already be used for testing after each epoch, needed for accuracy/loss per epoch graphs |
 | trees            | int              | 1 - 10.000                                                                                                  | 100            | Random Forest  | Number of trees in the forest                                                                                                               |
 | model            |                  |                                                                                                             | None           | General        | Allows user uploaded pre-trained models                                                                                                     |
+
 
 
