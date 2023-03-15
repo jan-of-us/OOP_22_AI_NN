@@ -5,3 +5,4 @@ pandas
 matplotlib
 plotly
 seaborn
+jinja2==3.0.3
