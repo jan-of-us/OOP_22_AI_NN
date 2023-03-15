@@ -6,3 +6,4 @@ matplotlib
 plotly
 seaborn
 jinja2==3.0.3
+Markdown>=3.2.1,<3.4
